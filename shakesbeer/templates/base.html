@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="/static/main.css" rel="stylesheet">
+    <title></title>
+</head>
+<body>
+<div id="header">
+<ul id="links">
+    <li><a href="{% url 'index' %}">index</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'auth_logout' %}?next=/shakesbeer/">sign out</a></li>
+    <li><a href="{% url 'add_recipe' %}">add recipe</a></li>
+    {% else %}
+    <li><a href="{% url 'auth_login' %}">sign in</a></li>
+    <li><a href="{% url 'registration_register' %}?next=/shakesbeer/">sign up</a></li>
+    {% endif %}
+</ul>
+</div>
+<div id="content">
+{% block body_block %}{% endblock %}
+</div>
+<div id="footer">
+©2015 the "EH?" team
+</div>
+</body>
+</html>

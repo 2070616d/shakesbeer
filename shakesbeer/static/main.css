@@ -1,0 +1,44 @@
+body {
+    background-color:#4499FF;
+    max-width: 1000px;
+    margin: 0px auto;
+    padding-bottom: 1.6em;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+    font-size: 16px;
+}
+
+#header{
+    max-width: 100%;
+    height: 200px;
+    background-image:url(/static/header.png);
+    background-size: cover;
+}
+
+#links {
+    left: 80%;
+    padding-top: 1.6em;
+    position: relative;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 500;
+    line-height: 26.4px;
+    list-style-type: none;
+}
+@media (max-width: 600px) {
+    #links { left: 70%; }
+}
+@media (max-width: 400px) {
+    #links { left: 50%; }
+}
+
+#content{
+    max-width: 100%;
+    padding: 0em 1em 1em;
+    background: rgba(255,255,255,0.666);
+}
+
+#footer{
+    text-align: right;
+}

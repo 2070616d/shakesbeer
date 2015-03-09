@@ -9,3 +9,5 @@
 *.sqlite3
 *.db
 keys.py
+.idea/
+shakesbeer/media
