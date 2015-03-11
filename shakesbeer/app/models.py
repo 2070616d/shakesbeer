@@ -13,7 +13,7 @@ class Recipe(models.Model):
     slug = models.SlugField(unique=True)
     user = models.ForeignKey(User)
     picture = models.ImageField(blank=True)
-    date = models.DateField()
+    date = models.DateTimeField()
     ingredients = models.ManyToManyField(Ingredient, through='UtilisedIngredient')
     instructions = models.CharField(max_length=1024)
     avgrating = models.FloatField(default=0.0)
@@ -51,5 +51,5 @@ class Rating(models.Model):
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe)
     user = models.ForeignKey(User)
-    date = models.DateField()
+    date = models.DateTimeField()
     rating = models.CharField(max_length=500)

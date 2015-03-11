@@ -31,10 +31,15 @@
         <p>'<i>{{ comment.rating }}</i>' by {{ comment.user.username }}</p>
         {% endfor %}
         </ul>
+        {% if user.is_authenticated %}
+            <form method="post" action="." enctype="multipart/form-data">
+            {% csrf_token %}{{ form.rating }}<br />
+            <input class="btn btn-primary" type="submit" value="Submit" />
+        {% else %}<p>Log in to comment on this recipe!</p>
+        {% endif %}
+
     </div>
     <div class="righthalfbox">
         <img src="{{recipe.picture.url}}" alt="{{recipe.name}}" />
     </div>
-
-</div>
 {% endblock %}
