@@ -1,6 +1,44 @@
 {% extends "base.html" %}
-
+{% load tags %}
 
 {% block body_block %}
-<p>bollocks</p>
+
+<div class="lefthalfbox">
+    <p>Welcome to ShakesBEER, the world's leading app that makes your petty alcoholism easier, Web-enabled and fun!</p>
+</div>
+
+<div class="righthalfbox">
+    <h2>Most recent cocktails</h2>
+    <ul class="listbox">
+    {% for recipe in top10recent %}
+    <li class="listboxitem"><strong>
+    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong> by {{ recipe.user }}
+    <span class="rating">
+    {% for star in recipe.avgrating|times %}
+    <span class="filled">★</span>
+    {% endfor %}
+    {% for star in recipe.avgrating|remainingtimes %}
+    <span>☆</span>
+    {% endfor %}
+    </span>
+    </li>
+    {% endfor %}
+    </ul>
+
+    <h2>Best rated cocktails</h2>
+    <ul class="listbox">
+    {% for recipe in top10rating %}
+    <li class="listboxitem"><strong>
+    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong> by {{ recipe.user }}
+    <span class="rating">
+    {% for star in recipe.avgrating|times %}
+    <span class="filled">★</span>
+    {% endfor %}
+    {% for star in recipe.avgrating|remainingtimes %}
+    <span>☆</span>
+    {% endfor %}
+    </li>
+    {% endfor %}
+    </ul>
+</div>
 {% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block body_block %}
+    <div class="lefthalfbox">
+        <h2>{{recipe.name}} by {{recipe.user}}
+        <span class="rating">
+        {% for star in recipe.avgrating|times %}
+        <span class="filled">★</span>
+        {% endfor %}
+        {% for star in recipe.avgrating|remainingtimes %}
+        <span>☆</span>
+        {% endfor %}
+        </span></h2>
+
+        <h4>Ingredients needed:</h4>
+        <ul>
+        {% for ingredient in ingredients %}
+        <li><u>{{ ingredient.ingredient }}</u>, {{ ingredient.amount }}</li>
+        {% endfor %}
+        </ul>
+
+        <h4>Instructions:</h4>
+        <ul>
+        {{recipe.instructions}}
+        </ul>
+
+        <h4>Comments:</h4>
+        <ul>
+        {% for comment in comments %}
+        <p>'<i>{{ comment.rating }}</i>' by {{ comment.user.username }}</p>
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="righthalfbox">
+        <img src="{{recipe.picture.url}}" alt="{{recipe.name}}" />
+    </div>
+
+</div>
+{% endblock %}

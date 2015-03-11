@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 class Ingredient(models.Model):
@@ -8,13 +9,20 @@ class Ingredient(models.Model):
         return self.name
 
 class Recipe(models.Model):
-    name = models.CharField(max_length=128, unique=True)
+    name = models.CharField(max_length=128)
+    slug = models.SlugField(unique=True)
     user = models.ForeignKey(User)
     picture = models.ImageField(blank=True)
+    date = models.DateField()
     ingredients = models.ManyToManyField(Ingredient, through='UtilisedIngredient')
     instructions = models.CharField(max_length=1024)
     avgrating = models.FloatField(default=0.0)
     noratings = models.IntegerField(default=0)
+
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name+self.user.username)
+        super(Recipe, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name
@@ -43,4 +51,5 @@ class Rating(models.Model):
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe)
     user = models.ForeignKey(User)
+    date = models.DateField()
     rating = models.CharField(max_length=500)
