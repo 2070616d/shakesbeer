@@ -3,7 +3,7 @@
 
 {% block body_block %}
     <div class="lefthalfbox">
-        <h2>{{recipe.name}} by {{recipe.user}}
+        <h1>{{recipe.name}} <span class="smalltext">by {{recipe.user}}</span>
         <span class="rating">
         {% for star in recipe.avgrating|times %}
         <span class="filled">★</span>
@@ -13,30 +13,35 @@
         {% endfor %}
         </span></h2>
 
-        <h4>Ingredients needed:</h4>
+        <div>
+        <h4>ingredients needed:</h4>
         <ul>
         {% for ingredient in ingredients %}
         <li><u>{{ ingredient.ingredient }}</u>, {{ ingredient.amount }}</li>
         {% endfor %}
         </ul>
+        </div>
 
-        <h4>Instructions:</h4>
-        <ul>
-        {{recipe.instructions}}
-        </ul>
+        <div>
+        <h4>instructions:</h4>
+        <p class="indent">{{recipe.instructions}}</p>
+        </div>
 
-        <h4>Comments:</h4>
-        <ul>
+        <div>
+        <h4>comments:</h4>
         {% for comment in comments %}
-        <p>'<i>{{ comment.rating }}</i>' by {{ comment.user.username }}</p>
+        <p class="indent">'<i>{{ comment.rating }}</i>'
+            <span class="smalltext">by {{ comment.user.username }}, {{ comment.date }}</span>
+        </p>
         {% endfor %}
-        </ul>
         {% if user.is_authenticated %}
             <form method="post" action="." enctype="multipart/form-data">
             {% csrf_token %}{{ form.rating }}<br />
             <input class="btn btn-primary" type="submit" value="Submit" />
-        {% else %}<p>Log in to comment on this recipe!</p>
+            </form>
+        {% else %}<p><a href="{% url 'auth_login' %}">Log in</a> to comment on this recipe!</p>
         {% endif %}
+        </div>
 
     </div>
     <div class="righthalfbox">

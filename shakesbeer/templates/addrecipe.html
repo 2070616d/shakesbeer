@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block body_block %}
+    <form method="post" action="." enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="lefthalfbox">
+        <h4>Name:</h4>{{ form.name }}
+
+        <h4>Ingredients needed:</h4>
+        <p>FIXME</p>
+
+        <h4>Instructions:</h4>
+        {{ form.instructions }}
+
+    </div>
+    <div class="righthalfbox">
+        <h4>Picture:</h4>
+        {{ form.picture }}
+        <br />
+        <input class="btn btn-primary" type="submit" value="Submit recipe" />
+        {% if errors %}
+        <h4>Errors:</h4>
+        <p>{{errors}}</p>
+        {% endif %}
+    </div>
+    </form>
+{% endblock %}

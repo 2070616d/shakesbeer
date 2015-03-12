@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from app.models import Recipe, UtilisedIngredient, Comment
-from app.forms import CommentForm
+from app.forms import CommentForm, RecipeForm
 from datetime import *
 
 def index(request):
@@ -32,6 +32,31 @@ def view_recipe(request,recipe_name_slug):
     return render(request, 'recipe.html', context_dict)
 
 # TODO implement
-def add_recipe(request):
-    context_dict = {}
-    return render(request, 'index.html', context_dict)
+def addrecipe(request):
+    if not request.user.is_authenticated():
+        return HttpResponse("You cannot do this as you are not logged in.")
+    context_dict={}
+    form = RecipeForm()
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = RecipeForm(request.POST)
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.user = request.user
+            recipe.date = datetime.now()
+            if 'picture' in request.FILES:
+                recipe.picture = request.FILES['picture']
+            recipe.save()
+        else:
+            # The supplied form contained errors - just print them to the terminal.
+            context_dict['errors'] = form.errors
+    else:
+        form = RecipeForm()
+    context_dict['form'] = form
+    return render(request, 'addrecipe.html', context_dict)
+
+# TODO implement
+def results(request):
+    results = Recipe.objects.order_by('-date')[:10]
+    context_dict = {'results': results}
+    return render(request, 'results.html', context_dict)

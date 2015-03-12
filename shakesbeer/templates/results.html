@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block body_block %}
+
+    <h2>Search results:</h2>
+    <ul class="listbox">
+    {% for recipe in results %}
+    <li class="listboxitem"><strong>
+    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong> by {{ recipe.user }}
+    <span class="rating">
+    {% for star in recipe.avgrating|times %}
+    <span class="filled">★</span>
+    {% endfor %}
+    {% for star in recipe.avgrating|remainingtimes %}
+    <span>☆</span>
+    {% endfor %}
+    </span>
+    </li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}

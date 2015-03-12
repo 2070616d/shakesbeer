@@ -11,7 +11,7 @@
     <li><a href="{% url 'index' %}">index</a></li>
     {% if user.is_authenticated %}
     <li><a href="{% url 'auth_logout' %}?next=/shakesbeer/">sign out</a></li>
-    <li><a href="{% url 'add_recipe' %}">add recipe</a></li>
+    <li><a href="{% url 'addrecipe' %}">add recipe</a></li>
     {% else %}
     <li><a href="{% url 'auth_login' %}">sign in</a></li>
     <li><a href="{% url 'registration_register' %}?next=/shakesbeer/">sign up</a></li>

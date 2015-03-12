@@ -16,6 +16,10 @@ body {
     font-size: 16px;
 }
 
+h1{
+    margin-top: 0;
+}
+
 #container {
     box-shadow: 0px 0px 55px 0px rgba(0,0,0,1);
     background: rgba(255,255,255,0.666);
@@ -50,21 +54,25 @@ body {
 /* unvisited link */
 #links a:link {
     color: #FFFFFF;
+    text-shadow: 5px 5px 5px rgb(0, 0, 0), -5px -5px 5px rgb(0, 0, 0);
 }
 
 /* visited link */
 #links a:visited {
     color: #FFFFFF;
+    text-shadow: 5px 5px 5px rgb(0, 0, 0), -5px -5px 5px rgb(0, 0, 0);
 }
 
 /* mouse over link */
 #links a:hover {
     color: #FFBBFF;
+    text-shadow: 5px 5px 5px rgb(0, 0, 0), -5px -5px 5px rgb(0, 0, 0);
 }
 
 /* selected link */
 #links a:active {
     color: #FFFFFF;
+    text-shadow: 5px 5px 5px rgb(0, 0, 0), -5px -5px 5px rgb(0, 0, 0);
 }
 
 #content{
@@ -79,7 +87,7 @@ body {
 
 #footer{
     padding: 10px;
-    text-shadow: 0px 0px 4px rgba(255, 255, 255, 255);
+    text-shadow: 5px 5px 5px rgba(255, 255, 255, 255), -5px -5px 5px rgba(255, 255, 255, 255);
     text-align: right;
 }
 
@@ -110,4 +118,13 @@ body {
 
 .rating .filled {
     color: #FFBB00;
+}
+
+.indent{
+    padding-left: 2em;
+}
+
+.smalltext{
+    font-size: 12px;
+    font-weight: normal;
 }
