@@ -3,6 +3,7 @@
 
 {% block body_block %}
     <div class="lefthalfbox">
+        {% searchbar %}
         <h1>{{recipe.name}} <span class="smalltext">by {{recipe.user}}</span>
         <span class="rating">
         {% for star in recipe.avgrating|times %}

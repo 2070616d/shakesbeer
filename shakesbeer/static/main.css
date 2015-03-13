@@ -16,7 +16,7 @@ body {
     font-size: 16px;
 }
 
-h1{
+h1,h2{
     margin-top: 0;
 }
 
@@ -93,14 +93,18 @@ h1{
 
 .lefthalfbox{
     float: left;
-    width: 50%;
+    width: 49%;
 }
 
 .righthalfbox{
     float: right;
-    width: 50%;
+    width: 49%;
 }
 
+input[type=text], textarea{
+    border: 1px solid black;
+    width: 100%;
+}
 
 .listbox{
     padding-left: 10px;
@@ -127,4 +131,33 @@ h1{
 .smalltext{
     font-size: 12px;
     font-weight: normal;
+}
+
+#search{
+    border: 1px solid black;
+}
+#search input {
+	background: none repeat scroll 0 0 #fff;
+	border: 0 none;
+	color: #7F7F7F;
+	float: left;
+	height: 20px;
+	margin: 0;
+	padding: 10px;
+	transition: background 0.3s ease-in-out 0s;
+	width: calc(100% - 60px);
+}
+
+#search button {
+	background: url(/static/images/search.png) no-repeat scroll center center #2A273C;
+	cursor: pointer;
+	height: 40px;
+	text-indent: -99999em;
+	transition: background 0.3s ease-in-out 0s;
+	width: 40px;
+	border: 2px solid #fff;
+}
+
+#search button:hover {
+	background-color:#000;
 }
