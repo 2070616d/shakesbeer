@@ -101,9 +101,10 @@ h1,h2{
     width: 49%;
 }
 
-input[type=text], textarea{
+input[type=text], input[type=password], textarea{
     border: 1px solid black;
     width: 100%;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
 }
 
 .listbox{
@@ -131,6 +132,22 @@ input[type=text], textarea{
 .smalltext{
     font-size: 12px;
     font-weight: normal;
+}
+
+.btn {
+    background: #2A273C;
+    padding: 5px 10px 5px 10px;
+    color: #ffffff;
+    text-decoration: none;
+	border: 0 none;
+    font-weight: bold;
+    font-size: 12pt;
+	transition: background 0.3s ease-in-out 0s;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+}
+
+.btn:hover {
+    background: #000;
 }
 
 #search{
