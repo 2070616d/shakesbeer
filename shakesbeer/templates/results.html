@@ -4,6 +4,7 @@
 {% block body_block %}
     {% searchbar %}
     <h2>Search results:</h2>
+    {% if results %}
     <ul class="listbox">
     {% for recipe in results %}
     <li class="listboxitem"><strong>
@@ -19,5 +20,8 @@
     </li>
     {% endfor %}
     </ul>
+    {% else %}
+    <h2>No recipes found</h2>
+    {% endif %}
 
 {% endblock %}

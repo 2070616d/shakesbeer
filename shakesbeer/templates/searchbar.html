@@ -1,4 +1,5 @@
-<form method="get" id="search" action=".">
+<form method="post" id="search" action="/shakesbeer/results/">
+              {% csrf_token%}
               <input type="text" class="search" value="What do you have in your drinks cabinet?" onblur="if(this.value == '') { this.value = 'What do you have in your drinks cabinet?'; }" onfocus="if(this.value == 'What do you have in your drinks cabinet?') { this.value = ''; }" name="s">
               <button type="submit">Submit</button>
 </form>

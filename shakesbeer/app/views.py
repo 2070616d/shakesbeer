@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from app.models import Recipe, UtilisedIngredient, Comment
+from app.models import Recipe, UtilisedIngredient, Comment, Ingredient
+from django.db.models import Q
 from app.forms import CommentForm, RecipeForm
 from datetime import *
 
@@ -57,7 +58,10 @@ def addrecipe(request):
 
 # TODO implement
 def results(request):
-    results = Recipe.objects.order_by('-date')[:10]
+    results = []
+    if request.method == 'POST':
+        search = request.POST['s']
+        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__icontains=search) | Q(name__icontains=search)).order_by('-avgrating').distinct()
     context_dict = {'results': results}
     return render(request, 'results.html', context_dict)
 
