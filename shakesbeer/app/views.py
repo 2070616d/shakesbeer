@@ -60,3 +60,6 @@ def results(request):
     results = Recipe.objects.order_by('-date')[:10]
     context_dict = {'results': results}
     return render(request, 'results.html', context_dict)
+
+def about(request):
+    return render(request, 'about.html')

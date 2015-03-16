@@ -12,7 +12,7 @@
         {% for star in recipe.avgrating|remainingtimes %}
         <span>☆</span>
         {% endfor %}
-        </span></h2>
+        </span></h1>
 
         <div>
         <h4>ingredients needed:</h4>
@@ -46,6 +46,6 @@
 
     </div>
     <div class="righthalfbox">
-        <img src="{{recipe.picture.url}}" alt="{{recipe.name}}" />
+        <img class="shrinky" src="{{recipe.picture.url}}" alt="{{recipe.name}}" />
     </div>
 {% endblock %}

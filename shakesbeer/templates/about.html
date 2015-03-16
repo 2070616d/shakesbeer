@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block body_block %}
+    <div class="lefthalfbox">
+        <h1>about us</h1>
+        <p>This <i>[insert adjective]</i> project has been painstakingly developed by the <strong>'EH'</strong> team,
+        which consists of, from left to right in photo:</p>
+        <ul>
+        <li>Christos Yiallouros</li>
+        <li>Remigijus Bartašius</li>
+        <li>Tom Shearer</li>
+        <li>Pavel Dikov</li>
+        </ul>
+
+    </div>
+    <div class="righthalfbox">
+        <img class="shrinky" src="/static/images/LEL.png" alt="A PICTURE OF THE EH TEAM" />
+    </div>
+{% endblock %}
