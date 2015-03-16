@@ -119,6 +119,7 @@ input[type=text], input[type=password], input[type=email], textarea{
     float: right;
     padding-right: 0.5em;
     color: black;
+    text-shadow: 0px 0px 5px white;
 }
 
 .rating .filled {
