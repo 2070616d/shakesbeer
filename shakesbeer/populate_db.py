@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from random import randint, uniform
 from datetime import *
 
-user = User.objects.get(id=1)
+user = User.objects.all()[0]
 
 def populate():
 
