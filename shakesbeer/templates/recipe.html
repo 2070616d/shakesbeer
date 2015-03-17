@@ -46,6 +46,8 @@
 
     </div>
     <div class="righthalfbox">
+		{% if recipe.picture %}
         <img class="shrinky" src="{{recipe.picture.url}}" alt="{{recipe.name}}" />
+		{% endif %}
     </div>
 {% endblock %}

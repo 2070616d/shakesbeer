@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from app.models import Recipe, UtilisedIngredient, Comment, Ingredient
 from django.db.models import Q
@@ -48,6 +48,8 @@ def addrecipe(request):
             if 'picture' in request.FILES:
                 recipe.picture = request.FILES['picture']
             recipe.save()
+            url = '/shakesbeer/recipe/' + recipe.slug + '/'
+            return redirect(url)
         else:
             # The supplied form contained errors - just print them to the terminal.
             context_dict['errors'] = form.errors
