@@ -62,8 +62,19 @@ def addrecipe(request):
 def results(request):
     results = []
     if request.method == 'POST':
-        search = request.POST['s']
-        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__icontains=search) | Q(name__icontains=search)).order_by('-avgrating').distinct()
+        search = request.POST['s'].split(' ')
+
+        first_term = search[0]
+        search = search[1:]
+        # Filter by first term
+        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__icontains=first_term) |
+            Q(name__icontains=first_term)).order_by('-avgrating').distinct()
+        # Filter further if more than one word ingredient or name provided
+        # order should preserve
+        for s in search:
+            results = results.filter(
+                Q(utilisedingredient__ingredient__name__icontains=s) |
+                Q(name__icontains=s))
     context_dict = {'results': results}
     return render(request, 'results.html', context_dict)
 
