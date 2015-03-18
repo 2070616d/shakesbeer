@@ -1,8 +1,15 @@
 <!DOCTYPE html>
+
+{% load staticfiles %}
+
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <link href="/static/main.css" rel="stylesheet">
+    <link href="/static/jquery-ui.css" rel="stylesheet"  type="text/css" media="all" />
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/jquery-ui.min.js" %}"></script>
+    <script src="{% static "js/shakesbeer-ajax.js" %}"></script>
     <title>ShakesBEER</title>
 </head>
 <body>
@@ -16,7 +23,7 @@
     <li><a href="{% url 'auth_login' %}">sign in</a></li>
     <li><a href="{% url 'registration_register' %}?next=/shakesbeer/">sign up</a></li>
     {% endif %}
-	<li>
+    <li>
         <button id="facebook" onclick="location.href='http://facebook.com/'">Facebook</button>
         <button id="twitter" onclick="location.href='http://twitter.com/shakesbeerapp/'">Twitter</button>
         <button id="googleplus" onclick="location.href='http://google.com/'">Google+</button>

@@ -5,6 +5,9 @@
     {% searchbar %}
     <h2>Search results:</h2>
     {% if results %}
+    {% if similar %}
+    <h4>no recipes found, here's a similar ones</h2>
+    {% endif %}
     <ul class="listbox">
     {% for recipe in results %}
     <li class="listboxitem"><strong>

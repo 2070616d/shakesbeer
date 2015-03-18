@@ -4,6 +4,8 @@ from app.models import Recipe, UtilisedIngredient, Comment, Ingredient
 from django.db.models import Q
 from app.forms import CommentForm, RecipeForm
 from datetime import *
+import re
+import json
 
 def index(request):
     top10recent = Recipe.objects.order_by('-date')[:10]
@@ -58,28 +60,51 @@ def addrecipe(request):
     context_dict['form'] = form
     return render(request, 'addrecipe.html', context_dict)
 
-# TODO implement
 def results(request,tag=""):
     results = []
+    similar = False
+
     if request.method == 'POST':
-        search = request.POST['s'].split(' ')
+        search = re.split(' |, |,', request.POST['s'])
     else:
         search = [tag]
 
     first_term = search[0]
-    search = search[1:]
+    end_search = search[1:]
     # Filter by first term
     results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__icontains=first_term) |
         Q(name__icontains=first_term)).order_by('-avgrating').distinct()
+
     # Filter further if more than one word ingredient or name provided
     # order should preserve
-    for s in search:
-        results = results.filter(
-            Q(utilisedingredient__ingredient__name__icontains=s) |
-            Q(name__icontains=s))
+    for s in end_search:
+        results = results.filter(Q(utilisedingredient__ingredient__name__icontains=s) | Q(name__icontains=s))
 
-    context_dict = {'results': results}
+    # If no results exist, find similiar ones
+    # i.e. with at least one elemet from search input
+    if not results:
+        similar = True
+        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__in=search)).order_by('-avgrating').distinct()
+
+    context_dict = {'results': results[:30], 'similar': similar}
     return render(request, 'results.html', context_dict)
+
+def get_names(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        ingredients = Ingredient.objects.filter(name__icontains = q )[:20]
+        results = []
+        for ingredient in ingredients:
+            ingredient_json = {}
+            ingredient_json['id'] = ingredient.id
+            ingredient_json['label'] = ingredient.name
+            ingredient_json['value'] = ingredient.name
+            results.append(ingredient_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
 
 def about(request):
     return render(request, 'about.html')

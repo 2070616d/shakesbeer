@@ -8,4 +8,5 @@ urlpatterns = patterns('',
         url(r'^results/(?P<tag>[\w|\W]+)/$', views.results, name='resultstag'),
         url(r'^about/$', views.about, name='about'),
         url(r'^recipe/(?P<recipe_name_slug>[\w\-]+)/$', views.view_recipe, name='recipe'),
+        url(r'^get_names/$', views.get_names, name='get_names'),
 )
