@@ -18,7 +18,7 @@
         <h4>ingredients needed:</h4>
         <ul>
         {% for ingredient in ingredients %}
-        <li><u>{{ ingredient.ingredient }}</u>, {{ ingredient.amount }}</li>
+        <li><a class="ingredient" href="{% url 'resultstag' ingredient.ingredient.name %}">{{ ingredient.ingredient }}</a>, {{ ingredient.amount }}</li>
         {% endfor %}
         </ul>
         </div>

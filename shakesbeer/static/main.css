@@ -250,3 +250,13 @@ input[type=text], input[type=password], input[type=email], textarea{
 #googleplus:hover {
 	background-color:#FF0000;
 }
+
+.ingredient{
+    font-weight: 600;
+    color: #0099FF;
+	transition: color 0.3s ease-in-out 0s;
+}
+.ingredient:hover{
+    color: #00BBFF;
+	transition: color 0.3s ease-in-out 0s;
+}
