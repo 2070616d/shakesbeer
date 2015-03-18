@@ -33,8 +33,8 @@ h1,h2{
 }
 
 #links {
-    left: 81%;
-    padding-top: 1.6em;
+    left: 80.5%;
+    padding-top: 1.3em;
     position: relative;
     font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
     font-size: 24px;
@@ -199,7 +199,51 @@ input[type=text], input[type=password], input[type=email], textarea{
 	width: 40px;
 	border: 2px solid #fff;
 }
-
 #search button:hover {
 	background-color:#000;
+}
+
+#facebook {
+    display: inline-block;
+    margin-top: 4px;
+	background: url(/static/images/facebook.png) no-repeat scroll center center #0066FF;
+	cursor: pointer;
+	height: 36px;
+	text-indent: -99999em;
+	transition: background 0.3s ease-in-out 0s;
+	width: 36px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,1);
+}
+#facebook:hover {
+	background-color:#2288FF;
+}
+
+#twitter {
+    display: inline-block;
+    margin-top: 4px;
+	background: url(/static/images/twitter.png) no-repeat scroll center center #55AAFF;
+	cursor: pointer;
+	height: 36px;
+	text-indent: -99999em;
+	transition: background 0.3s ease-in-out 0s;
+	width: 36px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,1);
+}
+#twitter:hover {
+	background-color:#88CCFF;
+}
+
+#googleplus {
+    display: inline-block;
+    margin-top: 4px;
+	background: url(/static/images/googleplus.png) no-repeat scroll center center #DD0000;
+	cursor: pointer;
+	height: 36px;
+	text-indent: -99999em;
+	transition: background 0.3s ease-in-out 0s;
+	width: 36px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,1);
+}
+#googleplus:hover {
+	background-color:#FF0000;
 }

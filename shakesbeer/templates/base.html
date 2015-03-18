@@ -16,9 +16,11 @@
     <li><a href="{% url 'auth_login' %}">sign in</a></li>
     <li><a href="{% url 'registration_register' %}?next=/shakesbeer/">sign up</a></li>
     {% endif %}
-	</br>
-	<a href="https://twitter.com/shakesbeerapp" class="twitter-follow-button" data-show-count="false">Follow @shakesbeerapp</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<li>
+        <form id="facebook" action="https://facebook.com/"><input type="submit" value="Facebook"></form>
+        <form id="twitter" action="https://twitter.com/shakesbeerapp"><input type="submit" value="Twitter"></form>
+        <form id="googleplus" action="https://google.com/"><input type="submit" value="googleplus"></form>
+    </li>
 </ul>
 </div>
 <div id="container">
