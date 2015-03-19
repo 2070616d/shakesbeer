@@ -59,7 +59,7 @@ def populate():
 
 # Adding methods
 def add_recipe(name, instructions, ingredients, user=user, date=datetime.now(),
-                picture='/media/no-image.png', avgrating=0.0,
+                picture='/static/images/no-image.png', avgrating=0.0,
                 noratings=0):
     recipe = Recipe.objects.get_or_create(name=name, instructions=instructions,
                     defaults={'user' : user, 'date' : date,
