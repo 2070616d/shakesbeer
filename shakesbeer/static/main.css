@@ -287,3 +287,54 @@ input[type=text], input[type=password], input[type=email], textarea{
     color: #00BBFF;
 	transition: color 0.3s ease-in-out 0s;
 }
+
+#facebookshare {
+    border: 0px;
+    display: inline-block;
+	background: url(/static/images/facebook.png) no-repeat scroll 9px center #0066FF;
+	cursor: pointer;
+	height: 36px;
+	transition: background 0.3s ease-in-out 0s;
+	width: 84px;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+    font-size: 12pt;
+    color: white;
+    text-indent: 16px;
+}
+#facebookshare:hover {
+	background-color:#2288FF;
+}
+
+#twittershare {
+    border: 0px;
+    display: inline-block;
+	background: url(/static/images/twitter.png) no-repeat scroll 7px center #55AAFF;
+	cursor: pointer;
+	height: 36px;
+	transition: background 0.3s ease-in-out 0s;
+	width: 84px;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+    font-size: 12pt;
+    color: white;
+    text-indent: 28px;
+}
+#twittershare:hover {
+	background-color:#88CCFF;
+}
+
+#gplusshare {
+    border: 0px;
+    display: inline-block;
+	background: url(/static/images/googleplus.png) no-repeat scroll 7px center #DD0000;
+	cursor: pointer;
+	height: 36px;
+	transition: background 0.3s ease-in-out 0s;
+	width: 84px;
+    font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+    font-size: 12pt;
+    color: white;
+    text-indent: 28px;
+}
+#gplusshare:hover {
+	background-color:#FF0000;
+}

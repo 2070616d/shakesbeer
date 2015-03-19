@@ -58,5 +58,10 @@
 		{% if recipe.picture %}
         <img class="shrinky" src="{{recipe.picture.url}}" alt="{{recipe.name}}" />
 		{% endif %}
+        <div>
+        <button id="facebookshare" onclick="location.href='http://facebook.com/share.php?u={{ link }}'">Share</button>
+        <button id="twittershare" onclick="location.href='https://twitter.com/intent/tweet?url={{ link }}'">Tweet</button>
+        <button id="gplusshare" onclick="location.href='https://plus.google.com/share?url={{ link }}'">Share</button>
+        </div>
     </div>
 {% endblock %}
