@@ -33,7 +33,7 @@ def view_recipe(request,recipe_name_slug):
     avgrating = float("{0:.2f}".format(avgrating))
     setattr(recipe, 'avgrating', avgrating)
     setattr(recipe, 'noratings', count)
-    #recipe.save()
+    recipe.refreshRatings()
 
     # get user's rating for recipe if available
     current_rating = 0

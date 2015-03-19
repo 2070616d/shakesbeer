@@ -29,6 +29,9 @@ class Recipe(models.Model):
             self.slug = '%s-%d' % (orig, x)
         super(Recipe, self).save(*args, **kwargs)
 
+    def refreshRatings(self, *args, **kwargs):
+        super(Recipe, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.name
 
