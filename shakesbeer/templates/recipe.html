@@ -43,6 +43,7 @@
             <input class="btn btn-primary" type="submit" value="Submit" />
             </form>
 		<span id="ratebox" class="rating">
+			<span>rate this recipe:</span>
 			{% for star in current_rating|times %}
 				<span class="filled"><a class="star" href="{% url 'rate' recipe.slug %}?score={{star}}">★</a></span>
 			{% endfor %}
@@ -50,7 +51,7 @@
 				<span><a class="star" href="{% url 'rate' recipe.slug %}?score={{star}}">☆</a></span>
 			{% endfor %}
 		</span>
-        {% else %}<p><a href="{% url 'auth_login' %}">Log in</a> to comment on this recipe!</p>
+        {% else %}<p><a href="{% url 'auth_login' %}">Log in</a> to comment or rate this recipe!</p>
         {% endif %}
         </div>
 
@@ -59,5 +60,10 @@
 		{% if recipe.picture %}
         <img class="shrinky" src="{{recipe.picture.url}}" alt="{{recipe.name}}" />
 		{% endif %}
+        <div>
+        <button id="facebookshare" onclick="location.href='http://facebook.com/share.php?u={{ link }}'">Share</button>
+        <button id="twittershare" onclick="location.href='https://twitter.com/intent/tweet?url={{ link }}'">Tweet</button>
+        <button id="gplusshare" onclick="location.href='https://plus.google.com/share?url={{ link }}'">Share</button>
+        </div>
     </div>
 {% endblock %}

@@ -58,7 +58,7 @@ def view_recipe(request,recipe_name_slug):
             print form.errors
     else:
         form = CommentForm()
-    context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form, 'current_rating': current_rating}
+    context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form, 'current_rating': current_rating, 'link': request.build_absolute_uri()}
     return render(request, 'recipe.html', context_dict)
 
 # TODO implement
