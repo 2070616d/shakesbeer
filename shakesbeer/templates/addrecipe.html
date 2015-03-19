@@ -10,7 +10,10 @@
         <h4>Name:</h4>{{ form.name }}
 
         <h4>Ingredients needed:</h4>
-        <p>FIXME</p>
+        {{form.ings.management_form}}
+        {% for ing in form.ings %}
+            {{ ing.as_p }}
+        {% endfor %}
 
         <h4>Instructions:</h4>
         {{ form.instructions }}

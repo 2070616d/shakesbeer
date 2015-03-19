@@ -45,7 +45,7 @@ class Recipe(models.Model):
 class UtilisedIngredient(models.Model):
     recipe = models.ForeignKey(Recipe)
     ingredient = models.ForeignKey(Ingredient)
-    amount = models.CharField(max_length=64)
+    amount = models.CharField(max_length=128)
 
 class Rating(models.Model):
     recipe = models.ForeignKey(Recipe)

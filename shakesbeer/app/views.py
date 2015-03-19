@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from app.models import Recipe, UtilisedIngredient, Comment, Ingredient, Rating
 from django.db.models import Q
-from app.forms import CommentForm, RecipeForm
+from app.forms import *
 from datetime import *
 import re
 import json
@@ -68,9 +68,11 @@ def addrecipe(request):
         return HttpResponse("You cannot do this as you are not logged in.")
     context_dict={}
     form = RecipeForm()
+    #ings = UtilisedIngredientForm()
     # A HTTP POST?
     if request.method == 'POST':
         form = RecipeForm(request.POST)
+        ings = UtilisedIngredientFormSet(request.POST)
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.user = request.user
@@ -78,6 +80,11 @@ def addrecipe(request):
             if 'picture' in request.FILES:
                 recipe.picture = request.FILES['picture']
             recipe.save()
+            for ing in ings:
+                if ing.is_valid() and ing.cleaned_data['ingredient']!='':
+                    print ing.cleaned_data['ingredient']
+                    ingredient=Ingredient.objects.get_or_create(name=ing.cleaned_data['ingredient'])[0]
+                    UtilisedIngredient.objects.create(recipe=recipe, ingredient=ingredient, amount=ing.cleaned_data['amount'])
             url = '/shakesbeer/recipe/' + recipe.slug + '/'
             return redirect(url)
         else:
@@ -85,7 +92,10 @@ def addrecipe(request):
             context_dict['errors'] = form.errors
     else:
         form = RecipeForm()
+        #ings = UtilisedIngredientForm()
+
     context_dict['form'] = form
+    #context_dict['ings'] = ings
     return render(request, 'addrecipe.html', context_dict)
 
 def results(request,tag=""):
