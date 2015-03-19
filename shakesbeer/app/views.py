@@ -36,12 +36,14 @@ def view_recipe(request,recipe_name_slug):
     recipe.save()
 
     # get user's rating for recipe if available
-    current_rating = Rating.objects.filter(recipe=recipe,user=request.user)
-    if current_rating.exists():
-        current_rating = getattr(current_rating[0], 'rating')
-    else:
-        current_rating = 0
-    
+    current_rating = 0
+    if request.user.is_authenticated():
+        current_rating = Rating.objects.filter(recipe=recipe,user=request.user)
+        if current_rating.exists():
+            current_rating = getattr(current_rating[0], 'rating')
+        else:
+            current_rating = 0
+
     # A HTTP POST?
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -91,6 +93,7 @@ def results(request,tag=""):
 
     if request.method == 'POST':
         search = re.split(' |, |,', request.POST['s'])
+        search = filter(None, search)
     else:
         search = [tag]
 
@@ -108,7 +111,9 @@ def results(request,tag=""):
     # i.e. with at least one elemet from search input
     if not results:
         similar = True
-        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__in=search)).order_by('-avgrating').distinct()
+        search_regex = r'{0}'.format('|'.join(search))
+        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__regex=search_regex)).order_by('-avgrating').distinct()
+        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__iregex=search_regex)).order_by('-avgrating').distinct()
 
     context_dict = {'results': results[:30], 'similar': similar}
     return render(request, 'results.html', context_dict)
