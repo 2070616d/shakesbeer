@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from app.models import Recipe, UtilisedIngredient, Comment, Ingredient
+from app.models import Recipe, UtilisedIngredient, Comment, Ingredient, Rating
 from django.db.models import Q
 from app.forms import CommentForm, RecipeForm
 from datetime import *
 import re
 import json
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     top10recent = Recipe.objects.order_by('-date')[:10]
@@ -17,6 +18,30 @@ def view_recipe(request,recipe_name_slug):
     recipe = Recipe.objects.get(slug=recipe_name_slug)
     ingredients = UtilisedIngredient.objects.filter(recipe=recipe)
     comments = Comment.objects.filter(recipe=recipe)
+
+    # update recipe ratings
+    total = 0
+    count = 0
+    ratings = Rating.objects.filter(recipe=recipe)
+    for rating in ratings:
+        count = count + 1
+        total = total + getattr(rating, 'rating')
+    if total == 0:
+        avgrating = 0.0
+    else:
+        avgrating = total / float(count)
+    avgrating = float("{0:.2f}".format(avgrating))
+    setattr(recipe, 'avgrating', avgrating)
+    setattr(recipe, 'noratings', count)
+    recipe.save()
+
+    # get user's rating for recipe if available
+    current_rating = Rating.objects.filter(recipe=recipe,user=request.user)
+    if current_rating.exists():
+        current_rating = getattr(current_rating[0], 'rating')
+    else:
+        current_rating = 0
+    
     # A HTTP POST?
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -31,7 +56,7 @@ def view_recipe(request,recipe_name_slug):
             print form.errors
     else:
         form = CommentForm()
-    context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form}
+    context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form, 'current_rating': current_rating}
     return render(request, 'recipe.html', context_dict)
 
 # TODO implement
@@ -114,3 +139,19 @@ def get_names(request):
 
 def about(request):
     return render(request, 'about.html')
+
+@login_required
+def rate(request,recipe_name_slug):
+    recipe = Recipe.objects.get(slug=recipe_name_slug)
+    url = '/shakesbeer/recipe/' + recipe_name_slug + '/'
+    if request.method == 'GET':
+        if 'score' in request.GET:
+            score = request.GET['score']
+            try:
+                rating = Rating.objects.filter(recipe=recipe,user=request.user)
+                if rating.exists():
+                    rating[0].delete()
+                rating = Rating.objects.get_or_create(recipe=recipe, rating=score, user=request.user)[0]
+            except:
+                pass
+    return redirect(url)

@@ -33,10 +33,6 @@ class Recipe(models.Model):
                 return True
         return False
 
-    def applyRating(rating):
-        avgrating = (avgrating*noratings + rating)/(noratings+1)
-        noratings = noratings+1
-
 # django canny store dictionaries inside models, therefore we do stupid things like this
 class UtilisedIngredient(models.Model):
     recipe = models.ForeignKey(Recipe)

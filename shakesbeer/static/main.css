@@ -123,6 +123,24 @@ input[type=text], input[type=password], input[type=email], textarea{
     color: #FFBB00;
 }
 
+.star:link {
+    color: orange;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.star:visited {
+    color: orange;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+
+#ratebox {
+    margin-top: -35px;
+    margin-right: -10px;
+}
+
 .indent{
     padding-left: 2em;
 }

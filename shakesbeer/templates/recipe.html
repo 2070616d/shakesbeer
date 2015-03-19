@@ -5,7 +5,7 @@
     <div class="lefthalfbox">
         {% searchbar %}
         <h1>{{recipe.name}} <span class="smalltext">by {{recipe.user}}</span>
-        <span class="rating">
+        <span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
         {% for star in recipe.avgrating|times %}
         <span class="filled">★</span>
         {% endfor %}
@@ -40,6 +40,14 @@
             {% csrf_token %}{{ form.rating }}<br />
             <input class="btn btn-primary" type="submit" value="Submit" />
             </form>
+		<span id="ratebox" class="rating">
+			{% for star in current_rating|times %}
+				<span class="filled"><a class="star" href="{% url 'rate' recipe.slug %}?score={{star}}">★</a></span>
+			{% endfor %}
+			{% for star in current_rating|remainingtimes %}
+				<span><a class="star" href="{% url 'rate' recipe.slug %}?score={{star}}">☆</a></span>
+			{% endfor %}
+		</span>
         {% else %}<p><a href="{% url 'auth_login' %}">Log in</a> to comment on this recipe!</p>
         {% endif %}
         </div>
