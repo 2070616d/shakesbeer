@@ -72,11 +72,10 @@ def results(request,tag=""):
     first_term = search[0]
     end_search = search[1:]
     # Filter by first term
-    results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__icontains=first_term) |
-        Q(name__icontains=first_term)).order_by('-avgrating').distinct()
+    results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__icontains=first_term) | Q(name__icontains=first_term)).order_by('-avgrating').distinct()
 
-    # Filter further if more than one word ingredient or name provided
-    # order should preserve
+    # # Filter further if more than one word ingredient or name provided
+    # # order should preserve
     for s in end_search:
         results = results.filter(Q(utilisedingredient__ingredient__name__icontains=s) | Q(name__icontains=s))
 
@@ -93,6 +92,7 @@ def get_names(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
         ingredients = Ingredient.objects.filter(name__icontains = q )[:20]
+        recipes = Recipe.objects.filter(name__icontains = q)[:10]
         results = []
         for ingredient in ingredients:
             ingredient_json = {}
@@ -100,6 +100,12 @@ def get_names(request):
             ingredient_json['label'] = ingredient.name
             ingredient_json['value'] = ingredient.name
             results.append(ingredient_json)
+        for recipe in recipes:
+            recipe_json = {}
+            recipe_json['id'] = recipe.id
+            recipe_json['label'] = recipe.name
+            recipe_json['value'] = recipe.name
+            results.append(recipe_json)
         data = json.dumps(results)
     else:
         data = 'fail'
