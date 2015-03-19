@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+import itertools
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -21,7 +22,11 @@ class Recipe(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name+self.user.username)
+        self.slug = orig = slugify(self.name+self.user.username)
+        for x in itertools.count(1):
+            if not Recipe.objects.filter(slug=self.slug).exists():
+                break
+            self.slug = '%s-%d' % (orig, x)
         super(Recipe, self).save(*args, **kwargs)
 
     def __unicode__(self):
