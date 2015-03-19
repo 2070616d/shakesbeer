@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from app.models import Recipe, UtilisedIngredient, Comment, Ingredient, Rating
 from django.db.models import Q
-from app.forms import CommentForm, RecipeForm
+from app.forms import *
 from datetime import *
 import re
 import json
@@ -33,7 +33,7 @@ def view_recipe(request,recipe_name_slug):
     avgrating = float("{0:.2f}".format(avgrating))
     setattr(recipe, 'avgrating', avgrating)
     setattr(recipe, 'noratings', count)
-    recipe.save()
+    recipe.refreshRatings()
 
     # get user's rating for recipe if available
     current_rating = 0
@@ -53,12 +53,13 @@ def view_recipe(request,recipe_name_slug):
             comment.recipe = recipe
             comment.date = datetime.now()
             comment.save()
+            return HttpResponseRedirect('')
         else:
             # The supplied form contained errors - just print them to the terminal.
             print form.errors
     else:
         form = CommentForm()
-    context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form, 'current_rating': current_rating, 'link': request.build_absolute_uri()}
+    context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form, 'current_rating': current_rating}
     return render(request, 'recipe.html', context_dict)
 
 # TODO implement
@@ -67,16 +68,29 @@ def addrecipe(request):
         return HttpResponse("You cannot do this as you are not logged in.")
     context_dict={}
     form = RecipeForm()
+    #ings = UtilisedIngredientForm()
     # A HTTP POST?
     if request.method == 'POST':
         form = RecipeForm(request.POST)
+        ings = UtilisedIngredientFormSet(request.POST)
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.user = request.user
             recipe.date = datetime.now()
             if 'picture' in request.FILES:
                 recipe.picture = request.FILES['picture']
+            else:
+                recipe.picture = '/static/images/no-image.png'
             recipe.save()
+            print request.POST
+            for ing in ings:
+                try:
+                    if ing.is_valid() and ing.cleaned_data['ingredient']!='':
+                        print ing.cleaned_data['ingredient']
+                        ingredient=Ingredient.objects.get_or_create(name=ing.cleaned_data['ingredient'])[0]
+                        UtilisedIngredient.objects.create(recipe=recipe, ingredient=ingredient, amount=ing.cleaned_data['amount'])
+                except:
+                    pass
             url = '/shakesbeer/recipe/' + recipe.slug + '/'
             return redirect(url)
         else:
@@ -84,7 +98,10 @@ def addrecipe(request):
             context_dict['errors'] = form.errors
     else:
         form = RecipeForm()
+        #ings = UtilisedIngredientForm()
+
     context_dict['form'] = form
+    #context_dict['ings'] = ings
     return render(request, 'addrecipe.html', context_dict)
 
 def results(request,tag=""):

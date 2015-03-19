@@ -10,6 +10,7 @@
     <script src="{% static "js/jquery.min.js" %}"></script>
     <script src="{% static "js/jquery-ui.min.js" %}"></script>
     <script src="{% static "js/shakesbeer-ajax.js" %}"></script>
+    {% block head_block %}{% endblock %}
     <title>{% block title %}{% endblock %} ShakesBEER</title>
 </head>
 <body>
@@ -24,9 +25,9 @@
     <li><a href="{% url 'registration_register' %}?next=/shakesbeer/">sign up</a></li>
     {% endif %}
     <li>
-        <button id="facebook" onclick="location.href='http://facebook.com/'">Facebook</button>
+        <button id="facebook" onclick="location.href='https://www.facebook.com/shakesbeerapp'">Facebook</button>
         <button id="twitter" onclick="location.href='http://twitter.com/shakesbeerapp/'">Twitter</button>
-        <button id="googleplus" onclick="location.href='http://google.com/'">Google+</button>
+        <button id="googleplus" onclick="location.href='http://www.thesaurus.com/browse/no'">Google+</button>
     </li>
 </ul>
 </div>
