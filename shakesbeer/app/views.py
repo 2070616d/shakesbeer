@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from app.models import Recipe, UtilisedIngredient, Comment, Ingredient, Rating
 from django.db.models import Q
 from app.forms import CommentForm, RecipeForm
@@ -53,6 +53,7 @@ def view_recipe(request,recipe_name_slug):
             comment.recipe = recipe
             comment.date = datetime.now()
             comment.save()
+            return HttpResponseRedirect('')
         else:
             # The supplied form contained errors - just print them to the terminal.
             print form.errors
