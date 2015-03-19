@@ -12,8 +12,8 @@ class CommentForm(forms.ModelForm):
         fields = ('rating',)
 
 class UtilisedIngredientForm(forms.Form):
-    ingredient = forms.CharField(max_length=128)
-    amount = forms.CharField(max_length=128)
+    ingredient = forms.CharField(max_length=128, widget=forms.TextInput(attrs={'placeholder': 'what do we need?'}))
+    amount = forms.CharField(max_length=128, widget=forms.TextInput(attrs={'placeholder': 'how much do we need?'}))
 
 UtilisedIngredientFormSet = formset_factory(UtilisedIngredientForm)
 

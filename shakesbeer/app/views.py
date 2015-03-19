@@ -79,12 +79,18 @@ def addrecipe(request):
             recipe.date = datetime.now()
             if 'picture' in request.FILES:
                 recipe.picture = request.FILES['picture']
+            else:
+                recipe.picture = '/static/images/no-image.png'
             recipe.save()
+            print request.POST
             for ing in ings:
-                if ing.is_valid() and ing.cleaned_data['ingredient']!='':
-                    print ing.cleaned_data['ingredient']
-                    ingredient=Ingredient.objects.get_or_create(name=ing.cleaned_data['ingredient'])[0]
-                    UtilisedIngredient.objects.create(recipe=recipe, ingredient=ingredient, amount=ing.cleaned_data['amount'])
+                try:
+                    if ing.is_valid() and ing.cleaned_data['ingredient']!='':
+                        print ing.cleaned_data['ingredient']
+                        ingredient=Ingredient.objects.get_or_create(name=ing.cleaned_data['ingredient'])[0]
+                        UtilisedIngredient.objects.create(recipe=recipe, ingredient=ingredient, amount=ing.cleaned_data['amount'])
+                except:
+                    pass
             url = '/shakesbeer/recipe/' + recipe.slug + '/'
             return redirect(url)
         else:

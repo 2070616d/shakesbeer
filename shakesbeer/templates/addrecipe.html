@@ -1,8 +1,18 @@
 {% extends "base.html" %}
 {% load tags %}
+{% load static %}
 
 {% block title %}Add recipe -{% endblock %}
-
+{% block head_block %}
+<script src="{% static "js/jquery.formset.js" %}"></script>
+<script type="text/javascript">
+  $(function() {
+    $('#addings').formset({
+      prefix: '{{ form.ings.prefix }}'
+    });
+  })
+</script>
+{% endblock %}
 {% block body_block %}
     <form method="post" action="." enctype="multipart/form-data">
     {% csrf_token %}
@@ -10,10 +20,11 @@
         <h4>Name:</h4>{{ form.name }}
 
         <h4>Ingredients needed:</h4>
+        <div id="addings">
+            {% for ing in form.ings %}
+            <div class="ingredient">{{ ing.ingredient }}{{ ing.amount }}</div>
+        {% endfor %}</div>
         {{form.ings.management_form}}
-        {% for ing in form.ings %}
-            {{ ing.as_p }}
-        {% endfor %}
 
         <h4>Instructions:</h4>
         {{ form.instructions }}
