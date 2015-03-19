@@ -113,7 +113,6 @@ def results(request,tag=""):
         similar = True
         search_regex = r'{0}'.format('|'.join(search))
         results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__regex=search_regex)).order_by('-avgrating').distinct()
-        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__iregex=search_regex)).order_by('-avgrating').distinct()
 
     context_dict = {'results': results[:30], 'similar': similar}
     return render(request, 'results.html', context_dict)
