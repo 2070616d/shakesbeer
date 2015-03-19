@@ -93,6 +93,7 @@ h1,h2{
 
 input[type=text], input[type=password], input[type=email], textarea{
     border: 1px solid black;
+    resize: none;
     width: 100%;
     font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
 }
