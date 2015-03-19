@@ -33,7 +33,7 @@ def view_recipe(request,recipe_name_slug):
     avgrating = float("{0:.2f}".format(avgrating))
     setattr(recipe, 'avgrating', avgrating)
     setattr(recipe, 'noratings', count)
-    recipe.save()
+    #recipe.save()
 
     # get user's rating for recipe if available
     current_rating = 0
@@ -58,7 +58,7 @@ def view_recipe(request,recipe_name_slug):
             print form.errors
     else:
         form = CommentForm()
-    context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form, 'current_rating': current_rating, 'link': request.build_absolute_uri()}
+    context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form, 'current_rating': current_rating}
     return render(request, 'recipe.html', context_dict)
 
 # TODO implement
