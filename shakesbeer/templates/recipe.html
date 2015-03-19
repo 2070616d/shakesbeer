@@ -48,7 +48,7 @@
 				<span class="filled"><a class="star" href="{% url 'rate' recipe.slug %}?score={{star}}">★</a></span>
 			{% endfor %}
 			{% for star in current_rating|remainingtimes %}
-				<span><a class="star" href="{% url 'rate' recipe.slug %}?score={{star}}">☆</a></span>
+				<span><a class="starblack" href="{% url 'rate' recipe.slug %}?score={{star}}">☆</a></span>
 			{% endfor %}
 		</span>
         {% else %}<p><a href="{% url 'auth_login' %}">Log in</a> to comment or rate this recipe!</p>
