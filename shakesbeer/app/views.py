@@ -36,11 +36,11 @@ def view_recipe(request,recipe_name_slug):
     recipe.save()
 
     # get user's rating for recipe if available
-    current_rating = Rating.objects.filter(recipe=recipe,user=request.user)
-    if current_rating.exists():
-        current_rating = getattr(current_rating[0], 'rating')
-    else:
-        current_rating = 0
+    current_rating = 0
+    if request.user.is_authenticated():
+        current_rating = Rating.objects.filter(recipe=recipe,user=request.user)
+        if current_rating.exists():
+            current_rating = getattr(current_rating[0], 'rating')
     
     # A HTTP POST?
     if request.method == 'POST':
