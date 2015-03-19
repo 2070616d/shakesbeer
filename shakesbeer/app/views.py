@@ -92,10 +92,33 @@ def results(request,tag=""):
     similar = False
 
     if request.method == 'POST':
-        search = re.split(' |, |,', request.POST['s'])
-        search = filter(None, search)
+        search = request.POST['s']
     else:
-        search = [tag]
+        search = tag
+
+    result = get_results(request, search)
+    context_dict = {'results': result['results'][:30], 'similar': result['similar']}
+
+    return render(request, 'results.html', context_dict)
+
+
+def search(request):
+    if request.method == 'GET':
+        query = request.GET['search'].strip()
+
+    result = get_results(request, query)
+
+    context_dict = {'results': result['results'][:30], 'similar': result['similar']}
+
+    return render(request, 'search.html', context_dict)
+
+def get_results(request, query):
+    results = []
+    similar = False
+
+    # Split the string to the list without spaces and commas
+    search = re.split(' |, |,', query)
+    search = filter(None, search)
 
     first_term = search[0]
     end_search = search[1:]
@@ -115,7 +138,7 @@ def results(request,tag=""):
         results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__regex=search_regex)).order_by('-avgrating').distinct()
 
     context_dict = {'results': results[:30], 'similar': similar}
-    return render(request, 'results.html', context_dict)
+    return context_dict
 
 def get_names(request):
     if request.is_ajax():

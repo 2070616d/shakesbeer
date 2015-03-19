@@ -1,5 +1,16 @@
 $(document).ready(function() {
 
+    $('#search').on("click", function(){
+      if ($(location).attr('pathname') == "/shakesbeer/") {
+        event.preventDefault();
+      }
+      var query = $('.search').val();
+      $.get('/shakesbeer/search/', {search: query}, function(data){
+        $('#search-results').html(data);
+        $('#text-hide').hide();
+      });
+    });
+
     $(function() {
     function split( val ) {
       return val.split( /,\s*/ );
