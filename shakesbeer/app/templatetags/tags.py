@@ -9,7 +9,7 @@ def times(number):
 
 @register.filter(name='remainingtimes')
 def remainingtimes(number):
-    return range(int(number+0.5)+1, 6)
+    return range(int(number+1.5), 6)
 
 @register.inclusion_tag('searchbar.html')
 def searchbar(cat=None):
