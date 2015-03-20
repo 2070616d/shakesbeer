@@ -8,7 +8,9 @@
 <script type="text/javascript">
   $(function() {
     $('#addings').formset({
-      prefix: '{{ form.ings.prefix }}'
+        prefix: '{{ form.ings.prefix }}',
+        addText: 'add another ingredient',
+        deleteText: 'remove this ingredient'
     });
   })
 </script>

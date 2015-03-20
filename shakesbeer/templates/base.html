@@ -10,6 +10,27 @@
     <script src="{% static "js/jquery.min.js" %}"></script>
     <script src="{% static "js/jquery-ui.min.js" %}"></script>
     <script src="{% static "js/shakesbeer-ajax.js" %}"></script>
+    <script type="text/javascript">
+            function resizeHeader(evt) {
+                var $window = $(window);
+                var width = $window.width();
+                var scale;
+
+                // early exit
+                if(width >= 1000) {
+                    $('#header').css({'transform': 'scale(1) translate(0px,0px)'});
+                    $('#container').css({'transform': 'translate(0px,0px)'});
+                    return;
+                }
+
+                scale = width/1000.0;
+
+                $('#header').css({'transform': 'scale(' + scale + ')' + 'translate(' + (width-1000)*(500/width) + 'px, '+ (184*(scale-1))*(500/width) + 'px)'});
+                $('#container').css({'transform': 'translate(0px, ' + -(184-184*scale) + 'px)'});
+            }
+            $(window).resize(resizeHeader);
+            jQuery(document).ready(resizeHeader);
+    </script>
     {% block head_block %}{% endblock %}
     <title>{% block title %}{% endblock %} ShakesBEER</title>
 </head>

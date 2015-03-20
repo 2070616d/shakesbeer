@@ -34,7 +34,7 @@ h1,h2{
 }
 
 #header{
-    max-width: 100%;
+    width: 1000px;
     height: 184px;
     background-image:url(/static/images/header.png);
     background-size: cover;
@@ -52,12 +52,6 @@ h1,h2{
     line-height: 26.4px;
     list-style-type: none;
     text-shadow: 0px 0px 30px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 1);
-}
-@media (max-width: 600px) {
-    #links { left: 70%; }
-}
-@media (max-width: 400px) {
-    #links { left: 50%; }
 }
 
 #links a {
