@@ -10,7 +10,7 @@
     <ul class="listbox">
     {% for recipe in myrecipes %}
     <li class="listboxitem"><strong>
-    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong>
+    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong><a href="{% url 'deleterecipe' recipe.slug %}"> <font size="5" color="#C00000">X</font></a>
     <span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
     {% for star in recipe.avgrating|times %}
     <span class="filled">★</span>
