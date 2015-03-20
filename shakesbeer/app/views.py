@@ -150,6 +150,23 @@ def get_results(request, query):
     context_dict = {'results': results[:30], 'similar': similar}
     return context_dict
 
+def get_ingredient_names(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        ingredients = Ingredient.objects.filter(name__icontains = q )[:20]
+        results = []
+        for ingredient in ingredients:
+            ingredient_json = {}
+            ingredient_json['id'] = ingredient.id
+            ingredient_json['label'] = ingredient.name
+            ingredient_json['value'] = ingredient.name
+            results.append(ingredient_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
 def get_names(request):
     if request.is_ajax():
         q = request.GET.get('term', '')

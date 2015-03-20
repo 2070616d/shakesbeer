@@ -180,6 +180,9 @@
                     updateElementIndex($(this), options.prefix, formCount);
                 });
                 totalForms.val(formCount + 1);
+                $("input[id*='ingredient']").autocomplete({
+                    source: "/shakesbeer/get_ingredient_names/"
+                });
                 // Check if we've exceeded the maximum allowed number of forms:
                 if (!showAddButton()) buttonRow.hide();
                 // If a post-add callback was supplied, call it with the added form:
