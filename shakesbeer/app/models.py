@@ -30,6 +30,19 @@ class Recipe(models.Model):
         super(Recipe, self).save(*args, **kwargs)
 
     def refreshRatings(self, *args, **kwargs):
+        total = 0
+        count = 0
+        ratings = Rating.objects.filter(recipe=self)
+        for rating in ratings:
+            count = count + 1
+            total = total + getattr(rating, 'rating')
+        if total == 0:
+            avgrating = 0.0
+        else:
+            avgrating = total / float(count)
+        avgrating = float("{0:.2f}".format(avgrating))
+        setattr(self, 'avgrating', avgrating)
+        setattr(self, 'noratings', count)
         super(Recipe, self).save(*args, **kwargs)
 
     def __unicode__(self):
