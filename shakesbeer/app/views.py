@@ -14,6 +14,12 @@ def index(request):
     context_dict = {'top10recent': top10recent, 'top10rating': top10rating}
     return render(request, 'index.html', context_dict)
 
+def userpage(request):
+    current_user = request.user
+    myrecipes = Recipe.objects.filter(user=current_user).order_by('-avgrating')
+    context_dict = {'myrecipes': myrecipes}
+    return render(request, 'userpage.html', context_dict)
+
 def view_recipe(request,recipe_name_slug):
     recipe = Recipe.objects.get(slug=recipe_name_slug)
     ingredients = UtilisedIngredient.objects.filter(recipe=recipe)

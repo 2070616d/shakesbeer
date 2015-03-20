@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block title %}Main -{% endblock %}
+
+{% block body_block %}
+	<h2>Userpage</h2>
+	
+    <h4>My Recipes</h4>
+    <ul class="listbox">
+    {% for recipe in myrecipes %}
+    <li class="listboxitem"><strong>
+    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong>
+    <span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
+    {% for star in recipe.avgrating|times %}
+    <span class="filled">★</span>
+    {% endfor %}
+    {% for star in recipe.avgrating|remainingtimes %}
+    <span>☆</span>
+    {% endfor %}
+    </span>
+    </li>
+    {% endfor %}
+    </ul>
+	
+	<a href="{% url 'auth_password_change' %}">Change Password</a>
+	
+{% endblock %}
