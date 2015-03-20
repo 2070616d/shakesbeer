@@ -38,12 +38,14 @@ h1,h2{
     height: 184px;
     background-image:url(/static/images/header.png);
     background-size: cover;
+    position: relative;
+    display: table;
 }
 
 #links {
-    left: 80.5%;
-    padding-top: 0.7em;
-    position: relative;
+    padding-left: 840px;
+    vertical-align: middle;
+    display: table-cell;
     font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
     font-size: 24px;
     font-style: normal;
