@@ -4,6 +4,7 @@ $(document).ready(function() {
       if ($(location).attr('pathname') == "/shakesbeer/") {
         event.preventDefault();
       }
+      $('.search').autocomplete('close');
       var query = $('.search').val();
       $.get('/shakesbeer/search/', {search: query}, function(data){
         $('#search-results').html(data);
@@ -28,6 +29,7 @@ $(document).ready(function() {
         }
       })
       .autocomplete({
+        delay: 100,
         source: function( request, response ) {
           $.getJSON( "/shakesbeer/get_names/", {
             term: extractLast( request.term )
