@@ -14,25 +14,18 @@ def index(request):
     context_dict = {'top10recent': top10recent, 'top10rating': top10rating}
     return render(request, 'index.html', context_dict)
 
+def userpage(request):
+    current_user = request.user
+    myrecipes = Recipe.objects.filter(user=current_user).order_by('-avgrating')
+    context_dict = {'myrecipes': myrecipes}
+    return render(request, 'userpage.html', context_dict)
+
 def view_recipe(request,recipe_name_slug):
     recipe = Recipe.objects.get(slug=recipe_name_slug)
     ingredients = UtilisedIngredient.objects.filter(recipe=recipe)
     comments = Comment.objects.filter(recipe=recipe)
 
     # update recipe ratings
-    total = 0
-    count = 0
-    ratings = Rating.objects.filter(recipe=recipe)
-    for rating in ratings:
-        count = count + 1
-        total = total + getattr(rating, 'rating')
-    if total == 0:
-        avgrating = 0.0
-    else:
-        avgrating = total / float(count)
-    avgrating = float("{0:.2f}".format(avgrating))
-    setattr(recipe, 'avgrating', avgrating)
-    setattr(recipe, 'noratings', count)
     recipe.refreshRatings()
 
     # get user's rating for recipe if available
@@ -198,4 +191,13 @@ def rate(request,recipe_name_slug):
                 rating = Rating.objects.get_or_create(recipe=recipe, rating=score, user=request.user)[0]
             except:
                 pass
+    return redirect(url)
+
+@login_required
+def deleterecipe(request, recipe_name_slug):
+    recipe = Recipe.objects.get(slug=recipe_name_slug)
+    url = '/shakesbeer/userpage/'
+    currentuser = request.user
+    if currentuser == recipe.user:
+        recipe.delete()
     return redirect(url)
