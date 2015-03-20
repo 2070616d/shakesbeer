@@ -95,6 +95,12 @@ h1,h2{
     width: 49%;
 }
 
+@media (max-width: 765px) {
+	.lefthalfbox { width: 100%; float: none; }
+	.righthalfbox { width: 100%; float: none; }
+}
+
+
 input[type=text], input[type=password], input[type=email], textarea{
     border: 1px solid black;
     resize: none;
