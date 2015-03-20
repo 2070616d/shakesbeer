@@ -8,19 +8,23 @@
 	
     <h4>My Recipes</h4>
     <ul class="listbox">
+	{% if myrecipes %}
     {% for recipe in myrecipes %}
-    <li class="listboxitem"><strong>
-    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong><a href="{% url 'deleterecipe' recipe.slug %}"> <font size="5" color="#C00000">X</font></a>
-    <span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
-    {% for star in recipe.avgrating|times %}
-    <span class="filled">★</span>
-    {% endfor %}
-    {% for star in recipe.avgrating|remainingtimes %}
-    <span>☆</span>
-    {% endfor %}
-    </span>
-    </li>
-    {% endfor %}
+		<li class="listboxitem"><strong>
+		<a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong><a href="{% url 'deleterecipe' recipe.slug %}"> <font size="5" color="#C00000">X</font></a>
+		<span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
+			{% for star in recipe.avgrating|times %}
+				<span class="filled">★</span>
+			{% endfor %}
+			{% for star in recipe.avgrating|remainingtimes %}
+				<span>☆</span>
+			{% endfor %}
+				</span>
+				</li>
+	{% endfor %}
+	{% else %}
+	You have no recipes...
+	{% endif %}
     </ul>
 	
 	<a href="{% url 'auth_password_change' %}">Change Password</a>

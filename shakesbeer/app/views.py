@@ -205,3 +205,12 @@ def rate(request,recipe_name_slug):
             except:
                 pass
     return redirect(url)
+
+@login_required
+def deleterecipe(request, recipe_name_slug):
+    recipe = Recipe.objects.get(slug=recipe_name_slug)
+    url = '/shakesbeer/userpage/'
+    currentuser = request.user
+    if currentuser == recipe.user:
+        recipe.delete()
+    return redirect(url)
