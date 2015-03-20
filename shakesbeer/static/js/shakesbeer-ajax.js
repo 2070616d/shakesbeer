@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    $('#search').on("click", function(){
+    $('#search').on("submit", function(event){
       if ($(location).attr('pathname') == "/shakesbeer/") {
         event.preventDefault();
       }
