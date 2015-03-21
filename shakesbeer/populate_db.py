@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from random import randint, uniform
 from datetime import *
 
-user = User.objects.all()[0]
+user = User.objects.create_user(username='test', email=None, password='test')
 
 def populate():
 
@@ -53,7 +53,7 @@ def populate():
         instructions="Put the cranberries into a medium size, rigid freezer container, cover with water (by about 2.5cm), freeze until solid. Mix the cranberry juice in a large jug (about 1.5 litre) with the orange and lime juices. To serve, smash the sheet of frozen cranberries into shards and put in the bottom of eight highball glasses. Put a wedge of lime and orange and a mint sprig in each glass, then pour in the mixed fruit juices and top up with Appletise.",
         ingredients=[['cranberries', '100g'], ['cranberry juice', '100ml'], ['orange juice', '500ml'], ['lime juice', 'of 1 lime'], ['lime', 'thin wedges'], ['orange', 'thin wedges'], ['mint sprigs', 'to taste'], ['Appletise', '600ml']]);
 
-    # Print what was added
+    # Print what recipes was added
     for recipe in Recipe.objects.all():
         print recipe.name
 
