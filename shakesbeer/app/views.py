@@ -57,7 +57,6 @@ def view_recipe(request,recipe_name_slug):
     context_dict = {'recipe': recipe, 'ingredients': ingredients, 'comments': comments, 'form': form, 'current_rating': current_rating}
     return render(request, 'recipe.html', context_dict)
 
-# TODO implement
 def addrecipe(request):
     if not request.user.is_authenticated():
         return HttpResponse("You cannot do this as you are not logged in.")
@@ -218,5 +217,6 @@ def deleterecipe(request, recipe_name_slug):
     url = '/shakesbeer/userpage/'
     currentuser = request.user
     if currentuser == recipe.user:
+        UtilisedIngredient.objects.filter(recipe=recipe).delete()
         recipe.delete()
     return redirect(url)
