@@ -121,6 +121,18 @@ input[type=text], input[type=password], input[type=email], textarea{
     line-height: 1.5em;
 }
 
+.delete{
+    font-size: 18pt;
+    font-weight: bold;
+    color: #C00000;
+    text-decoration: none;
+	transition: color 0.3s ease-in-out 0s;
+}
+.delete:hover{
+    color: #F00000;
+	transition: color 0.3s ease-in-out 0s;
+}
+
 .rating {
     display: block;
     float: right;
