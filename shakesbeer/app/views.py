@@ -15,6 +15,8 @@ def index(request):
     return render(request, 'index.html', context_dict)
 
 def userpage(request):
+    if not request.user.is_authenticated():
+        return HttpResponse("You cannot do this as you are not logged in.")
     current_user = request.user
     myrecipes = Recipe.objects.filter(user=current_user).order_by('-avgrating')
     context_dict = {'myrecipes': myrecipes}

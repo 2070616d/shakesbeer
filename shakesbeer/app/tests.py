@@ -2,11 +2,10 @@ from django.test import TestCase
 from app.models import Recipe, UtilisedIngredient, Comment, Ingredient, Rating
 from django.contrib.auth.models import User
 from datetime import *
+import time
 from django.core.urlresolvers import reverse
-from django.test.client import Client
+from django.test import Client
 
-
-AUTHENTICATION_BACKENDS = ["app.auth_backends.TestcaseUserBackend"]
 
 def add_recipe(name, user):
     picture='/static/images/no-image.png'
@@ -71,7 +70,9 @@ class ViewTests(TestCase):
 
         # check if recipes are sorted by most recent
         self.assertEqual(top10recent[0], recipe3)
+        time.sleep(0.5)
         self.assertEqual(top10recent[1], recipe2)
+        time.sleep(0.5)
         self.assertEqual(top10recent[2], recipe1)
 
         top10rating = response.context['top10rating']
@@ -83,20 +84,109 @@ class ViewTests(TestCase):
         self.assertEqual(top10rating[1], recipe1)
         self.assertEqual(top10rating[2], recipe3)
 
-##    def test_userpage(self):
-##        user = User.objects.create(username="test user", email="test@mail.com", password="1234")
-##        user2 = User.objects.create(username="test user 2")
-##
-##        recipe1 = add_recipe("test recipe 1", user)
-##        recipe2 = add_recipe("test recipe 2", user2)
-##        recipe3 = add_recipe("test recipe 3", user)
-##
-##        c = Client()
-##        login = c.login(testcase_user=user)
-##        self.assertTrue(login)
-##        response = self.client.get(reverse('userpage'))
-##
-##        myrecipes = response.context['myrecipes']
-##        num_recipes = len(myrecipes)
-##        self.assertEqual(num_recipes, 2)
+    def test_view_recipe(self):
+        user = User.objects.create(username="test user")
+        recipe = add_recipe("test recipe", user)
+
+        response = self.client.get('/shakesbeer/recipe/test-recipetest-user/')
+        self.assertEqual(response.context['recipe'], recipe)
+        self.assertEqual(response.context['current_rating'], 0)
+
+    def test_get_results(self):
+        user = User.objects.create(username="test user")
+        recipe = add_recipe("test recipe", user)
+
+        response = self.client.get('/shakesbeer/results/test/')
+        results = response.context['results']
+        self.assertEquals(len(results), 1)
+
+        recipe = add_recipe("test recipe 2", user)
+        response = self.client.get('/shakesbeer/results/test/')
+        results = response.context['results']
+        self.assertEquals(len(results), 2)
+
+    def test_guest(self):
+        response = self.client.get(reverse('addrecipe'))
+        self.assertContains(response, 'You cannot do this as you are not logged in.')
+
+        response = self.client.get(reverse('userpage'))
+        self.assertContains(response, 'You cannot do this as you are not logged in.')
+
+        user = User.objects.create(username="test user")
+        recipe = add_recipe("test recipe", user)
+        response = self.client.get('/shakesbeer/recipe/test-recipetest-user/')
+        self.assertContains(response, 'comment or rate this recipe!')
+
+
+    def test_user_page(self):
+        # register user
+        response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})
+        # log in      
+        response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
+        self.assertEqual(response.status_code, 200)
+        # go to user page
+        response = self.client.get(reverse('userpage'))
+        myrecipes = response.context['myrecipes']
+        self.assertEqual(len(myrecipes), 0)
+
+        # add recipes, 2 of which are bob's
+        bob = User.objects.get(username="bob")
+        user = User.objects.create(username="test user")
+        recipe1 = add_recipe('recipe1', bob)
+        recipe2 = add_recipe('recipe2', user)
+        recipe3 = add_recipe('recipe3', bob)
+
+        # go to user page
+        response = self.client.get(reverse('userpage'))
+        myrecipes = response.context['myrecipes']
+        self.assertEqual(len(myrecipes), 2)
+
+    def test_delete_recipe(self):
+        response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})    
+        response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
+        self.assertEqual(response.status_code, 200)
         
+        bob = User.objects.get(username="bob")
+        recipe = add_recipe('recipe', bob)
+        response = self.client.get(reverse('userpage'))
+        myrecipes = response.context['myrecipes']
+        self.assertEqual(len(myrecipes), 1)
+
+        # delete recipe
+        response = self.client.get('/shakesbeer/deleterecipe/recipebob/')
+        response = self.client.get(reverse('userpage'))
+        myrecipes = response.context['myrecipes']
+        self.assertEqual(len(myrecipes), 0)
+
+    def test_rate(self):
+        user = User.objects.create(username="test user")
+        recipe = add_recipe('test recipe', user)
+        response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})    
+        response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
+        response = self.client.get('/shakesbeer/rate/test-recipetest-user/?score=5')
+        recipe.refreshRatings()
+        self.assertEqual(recipe.avgrating, 5.0)
+
+    def test_comment(self):
+        response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})    
+        response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
+        bob = User.objects.get(username="bob")
+
+        recipe = add_recipe('recipe', bob)
+        response = self.client.post('/shakesbeer/recipe/recipebob/', {'rating':'this is a comment'})
+        response = self.client.get('/shakesbeer/recipe/recipebob/')
+        self.assertContains(response, 'this is a comment')
+        
+    def test_about_page(self):
+        response = self.client.get(reverse('about'))
+        self.assertContains(response, 'about us')
+
+##    def test_add_recipe(self):
+##        # register user
+##        response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})
+##        # log in      
+##        response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
+##        self.assertEqual(response.status_code, 200)
+##
+##        # add recipe from page
+##        response = self.client.post('/shakesbeer/recipe/add/', {'name':'test recipe','form-0-ingredient':'vodka','form-0-amount':'one litre','instructions':'mix','picture':'none'})
