@@ -130,7 +130,6 @@ def get_results(request, query):
     # Split the string to the list without spaces and commas
     search = re.split(' |, |,', query)
     search = filter(None, search)
-    print search
 
     if search != []:
         first_term = search[0]
