@@ -100,8 +100,7 @@ def addrecipe(request):
     return render(request, 'addrecipe.html', context_dict)
 
 def results(request,tag=""):
-    results = []
-    similar = False
+    result = []
 
     if request.method == 'POST':
         search = request.POST['s']
@@ -147,7 +146,7 @@ def get_results(request, query):
     if not results:
         similar = True
         search_regex = r'{0}'.format('|'.join(search))
-        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__regex=search_regex)).order_by('-avgrating').distinct()
+        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__iregex=search_regex) | Q(name__regex=search_regex)).order_by('-avgrating').distinct()
 
     context_dict = {'results': results[:30], 'similar': similar}
     return context_dict
