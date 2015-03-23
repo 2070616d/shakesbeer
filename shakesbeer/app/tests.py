@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from datetime import *
 import time
 from django.core.urlresolvers import reverse
-from django.test import Client
 
 def add_recipe(name, user):
     picture='/static/images/no-image.png'
@@ -16,15 +15,13 @@ def add_rating(recipe, user, score):
     rating = Rating.objects.get_or_create(recipe=recipe,rating=score,user=user)[0]
     return rating
 
-class TestcaseUserBackend(object):
-    def authenticate(self, testcase_user=None):
-        return testcase_user
-
-    def get_user(self, user_id):
-        return User.objects.get(pk=user_id)
-
 class ModelTests(TestCase):
-    def test_slug(self):
+    def test_recipe(self):
+        user = User.objects.create(username="test user")
+        recipe = add_recipe("test recipe", user)
+        self.assertEquals(recipe.__unicode__(), recipe.name)
+        
+    def test_unique_recipe_slug(self):
         user = User.objects.create(username="test user")
         recipe = add_recipe("test recipe", user)
         self.assertEqual(recipe.slug, 'test-recipetest-user')
@@ -32,9 +29,9 @@ class ModelTests(TestCase):
         recipe.save()
         self.assertEqual(recipe.slug, 'test-recipetest-user-1')
 
-    def test_ratings(self):
+    def test_refresh_ratings(self):
         user = User.objects.create(username="test user")
-        recipe = add_recipe("test recipe 2", user)
+        recipe = add_recipe("test recipe", user)
 
         rating1 = add_rating(recipe, user, 5)
         rating2 = add_rating(recipe, user, 4)
@@ -44,6 +41,12 @@ class ModelTests(TestCase):
         self.assertEquals(recipe.noratings, 3)
         # average should be 11 / 3 with two decimal digits, 3.37
         self.assertEquals(recipe.avgrating, 3.67)
+
+    def test_ingredient(self):
+          ingredient = Ingredient.objects.create(name="ingredient name")
+          self.assertEqual(ingredient.__unicode__(), ingredient.name)
+          
+        
 
 class ViewTests(TestCase):
     def test_index(self):
@@ -104,6 +107,61 @@ class ViewTests(TestCase):
         response = self.client.get('/shakesbeer/results/test/')
         results = response.context['results']
         self.assertEquals(len(results), 2)
+
+        response = self.client.get('/shakesbeer/results/recipe/')
+        results = response.context['results']
+        self.assertEquals(len(results), 3)
+
+    def test_results(self):
+        user = User.objects.create(username="test user")
+        response = self.client.post('/shakesbeer/results/',{'s':'test'})
+        results = response.context['results']
+        self.assertEquals(len(results), 0)
+        
+        recipe = add_recipe("test recipe", user)
+        recipe2 = add_recipe("recipe", user)
+        
+        response = self.client.post('/shakesbeer/results/',{'s':'test'})
+        results = response.context['results']
+        self.assertEquals(len(results), 1)
+        similar = response.context['similar']
+        self.assertEquals(similar, False)
+
+        response = self.client.post('/shakesbeer/results/',{'s':'recipe'})
+        results = response.context['results']
+        self.assertEquals(len(results), 2)
+        similar = response.context['similar']
+        self.assertEquals(similar, False)
+
+        response = self.client.post('/shakesbeer/results/',{'s':['test', 'recipe']})
+        results = response.context['results']
+        self.assertEquals(len(results), 2)
+        similar = response.context['similar']
+        self.assertEquals(similar, False)
+
+        response = self.client.post('/shakesbeer/results/',{'s':['test', 'recipe', 'search']})
+        results = response.context['results']
+        self.assertEquals(len(results), 0)
+        similar = response.context['similar']
+        self.assertEquals(similar, True)
+
+    def test_get_names(self):
+        user = User.objects.create(username="test user")
+        recipe = add_recipe("test recipe", user)
+        recipe2 = add_recipe("recipe", user)
+        response = self.client.get('/shakesbeer/get_names/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/shakesbeer/get_names/', {'term':'asdfghjkl'})
+        self.assertEqual(response.status_code, 200)
+        content = response.content
+        self.assertEquals(content, 'fail')
+        mimetype = response['Content-Type']
+        self.assertEquals(mimetype,'application/json')
+
+    def test_get_ingredient_names(self):
+        response = self.client.get('/shakesbeer/get_ingredient_names/')
+        self.assertEqual(response.status_code, 200)
 
     def test_guest(self):
         response = self.client.get(reverse('addrecipe'))

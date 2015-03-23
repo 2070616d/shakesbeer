@@ -48,11 +48,11 @@ class Recipe(models.Model):
     def __unicode__(self):
         return self.name
 
-    def hasIngredient(self,ingredient):
-        for i in self.ingredients.all():
-            if i == ingredient:
-                return True
-        return False
+##    def hasIngredient(self,ingredient):
+##        for i in self.ingredients.all():
+##            if i == ingredient:
+##                return True
+##        return False
 
 # django canny store dictionaries inside models, therefore we do stupid things like this
 class UtilisedIngredient(models.Model):
