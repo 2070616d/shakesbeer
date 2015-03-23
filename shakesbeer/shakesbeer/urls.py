@@ -19,14 +19,10 @@ urlpatterns = patterns('',
     url(r'^shakesbeer/', include('app.urls')),
     url(r'^accounts/register/$', LeRegistrationView.as_view(), name='registration_register'),
     (r'^accounts/', include('registration.backends.simple.urls')),
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-if settings.DEBUG:
-    urlpatterns += patterns(
-        'django.views.static',
-        (r'^media/(?P<path>.*)',
-        'serve',
-        {'document_root': settings.MEDIA_ROOT}), )
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + patterns('django.views.static',
+                                                                             (r'^media/(?P<path>.*)',
+                                                                              'serve',
+                                                                              {'document_root': settings.MEDIA_ROOT}), )
 
 handler404 = 'app.views.error404'
 handler403 = 'app.views.error403'
