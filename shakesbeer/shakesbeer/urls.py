@@ -27,3 +27,8 @@ if settings.DEBUG:
         (r'^media/(?P<path>.*)',
         'serve',
         {'document_root': settings.MEDIA_ROOT}), )
+
+handler404 = 'app.views.error404'
+handler403 = 'app.views.error403'
+handler500 = 'app.views.error500'
+handler400 = 'app.views.error400'

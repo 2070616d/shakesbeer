@@ -16,7 +16,7 @@ def index(request):
 
 def userpage(request):
     if not request.user.is_authenticated():
-        return HttpResponse("You cannot do this as you are not logged in.")
+        raise Http403("You cannot do this as you are not logged in.")
     current_user = request.user
     myrecipes = Recipe.objects.filter(user=current_user).order_by('-avgrating')
     context_dict = {'myrecipes': myrecipes}
@@ -59,7 +59,7 @@ def view_recipe(request,recipe_name_slug):
 
 def addrecipe(request):
     if not request.user.is_authenticated():
-        return HttpResponse("You cannot do this as you are not logged in.")
+        raise Http403("You cannot do this as you are not logged in.")
     context_dict={}
     form = RecipeForm()
     #ings = UtilisedIngredientForm()
@@ -220,3 +220,15 @@ def deleterecipe(request, recipe_name_slug):
         UtilisedIngredient.objects.filter(recipe=recipe).delete()
         recipe.delete()
     return redirect(url)
+
+def error404(request):
+    return render(request, 'error.html', {'errormessage': 'Page not found!'})
+
+def error403(request):
+    return render(request, 'error.html', {'errormessage': 'Access not permitted!'})
+
+def error400(request):
+    return render(request, 'error.html', {'errormessage': 'Bad request!'})
+
+def error500(request):
+    return render(request, 'error.html', {'errormessage': 'Server error!'})

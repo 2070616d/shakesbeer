@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load tags %}
+
+{% block title %}{{ Error }} -{% endblock %}
+
+{% block body_block %}
+    <div class="lefthalfbox">
+        {% searchbar %}
+        <h1>the glass is empty :(</h1>
+        <p>{{ errormessage }}</p>
+    </div>
+    <div class="righthalfbox">
+        <img class="shrinky" src="/static/images/emptyglass.png" alt="empty glass" />
+    </div>
+{% endblock %}
