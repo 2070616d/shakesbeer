@@ -5,7 +5,7 @@
 
 {% block body_block %}
     <div class="lefthalfbox">
-        {% searchbar %}
+        {% searchbar query%}
         <h1>{{recipe.name}} <span class="smalltext">by {{recipe.user}}</span>
         <span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
         {% for star in recipe.avgrating|times %}

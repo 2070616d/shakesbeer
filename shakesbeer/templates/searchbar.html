@@ -1,7 +1,7 @@
 <form method="post" id="search" action="/shakesbeer/results/">
     {% csrf_token%}
     <div class="ui-widget">
-    <input type="text" class="search" value="What do you have in your drinks cabinet?" onblur="if(this.value == '') { this.value = 'What do you have in your drinks cabinet?'; }" onfocus="if(this.value == 'What do you have in your drinks cabinet?') { this.value = ''; }" name="s">
+    <input type="text" class="search" value="{{ query|default:'What do you have in your drinks cabinet?'}}" onblur="if(this.value == '') { this.value = 'What do you have in your drinks cabinet?'; }" onfocus="if(this.value == 'What do you have in your drinks cabinet?') { this.value = ''; }" name="s">
     <button type="submit">Submit</button>
     </div>
 </form>

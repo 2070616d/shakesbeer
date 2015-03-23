@@ -100,8 +100,7 @@ def addrecipe(request):
     return render(request, 'addrecipe.html', context_dict)
 
 def results(request,tag=""):
-    results = []
-    similar = False
+    result = []
 
     if request.method == 'POST':
         search = request.POST['s']
@@ -109,7 +108,7 @@ def results(request,tag=""):
         search = tag
 
     result = get_results(request, search)
-    context_dict = {'results': result['results'][:30], 'similar': result['similar']}
+    context_dict = {'results': result['results'][:30], 'similar': result['similar'], 'query': search}
 
     return render(request, 'results.html', context_dict)
 
@@ -131,23 +130,25 @@ def get_results(request, query):
     # Split the string to the list without spaces and commas
     search = re.split(' |, |,', query)
     search = filter(None, search)
+    print search
 
-    first_term = search[0]
-    end_search = search[1:]
-    # Filter by first term
-    results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__icontains=first_term) | Q(name__icontains=first_term)).order_by('-avgrating').distinct()
+    if search != []:
+        first_term = search[0]
+        end_search = search[1:]
+        # Filter by first term
+        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__icontains=first_term) | Q(name__icontains=first_term)).order_by('-avgrating').distinct()
 
-    # # Filter further if more than one word ingredient or name provided
-    # # order should preserve
-    for s in end_search:
-        results = results.filter(Q(utilisedingredient__ingredient__name__icontains=s) | Q(name__icontains=s))
+        # # Filter further if more than one word ingredient or name provided
+        # # order should preserve
+        for s in end_search:
+            results = results.filter(Q(utilisedingredient__ingredient__name__icontains=s) | Q(name__icontains=s))
 
-    # If no results exist, find similiar ones
-    # i.e. with at least one elemet from search input
-    if not results:
-        similar = True
-        search_regex = r'{0}'.format('|'.join(search))
-        results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__in=search) | Q(name__regex=search_regex)).order_by('-avgrating').distinct()
+        # If no results exist, find similiar ones
+        # i.e. with at least one elemet from search input
+        if not results:
+            similar = True
+            search_regex = r'{0}'.format('|'.join(search))
+            results = Recipe.objects.filter(Q(utilisedingredient__ingredient__name__iregex=search_regex) | Q(name__regex=search_regex)).order_by('-avgrating').distinct()
 
     context_dict = {'results': results[:30], 'similar': similar}
     return context_dict

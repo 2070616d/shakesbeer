@@ -12,5 +12,5 @@ def remainingtimes(number):
     return range(int(number+1.5), 6)
 
 @register.inclusion_tag('searchbar.html')
-def searchbar(cat=None):
-    return {}
+def searchbar(query, cat=None):
+    return {'query': query}
