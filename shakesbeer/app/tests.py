@@ -6,7 +6,6 @@ import time
 from django.core.urlresolvers import reverse
 from django.test import Client
 
-
 def add_recipe(name, user):
     picture='/static/images/no-image.png'
     recipe = Recipe.objects.get_or_create(name=name,instructions="...",
@@ -95,6 +94,7 @@ class ViewTests(TestCase):
     def test_get_results(self):
         user = User.objects.create(username="test user")
         recipe = add_recipe("test recipe", user)
+        recipe2 = add_recipe("recipe", user)
 
         response = self.client.get('/shakesbeer/results/test/')
         results = response.context['results']
@@ -181,12 +181,16 @@ class ViewTests(TestCase):
         response = self.client.get(reverse('about'))
         self.assertContains(response, 'about us')
 
-##    def test_add_recipe(self):
-##        # register user
-##        response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})
-##        # log in      
-##        response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
-##        self.assertEqual(response.status_code, 200)
-##
-##        # add recipe from page
-##        response = self.client.post('/shakesbeer/recipe/add/', {'name':'test recipe','form-0-ingredient':'vodka','form-0-amount':'one litre','instructions':'mix','picture':'none'})
+    def test_add_recipe(self):
+        # register user
+        response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})
+        # log in      
+        response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
+        self.assertEqual(response.status_code, 200)
+
+        # add recipe from page
+        response = self.client.post('/shakesbeer/recipe/add/', {'name':'test recipe','form-0-ingredient':'vodka','form-MIN_NUM_FORMS':'0','form-MAX_NUM_FORMS':'1','form-INITIAL_FORMS':'0','form-TOTAL_FORMS':'1','form-0-amount':'one litre','instructions':'mix','picture':'none'})
+
+        response = self.client.get(reverse('userpage'))
+        myrecipes = response.context['myrecipes']
+        self.assertEqual(len(myrecipes), 1)
