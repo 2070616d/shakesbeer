@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
 from app.models import Recipe, UtilisedIngredient, Comment, Ingredient, Rating
 from django.db.models import Q
 from app.forms import *
@@ -16,7 +17,7 @@ def index(request):
 
 def userpage(request):
     if not request.user.is_authenticated():
-        raise Http403("You cannot do this as you are not logged in.")
+        raise PermissionDenied()
     current_user = request.user
     myrecipes = Recipe.objects.filter(user=current_user).order_by('-avgrating')
     context_dict = {'myrecipes': myrecipes}
@@ -59,7 +60,7 @@ def view_recipe(request,recipe_name_slug):
 
 def addrecipe(request):
     if not request.user.is_authenticated():
-        raise Http403("You cannot do this as you are not logged in.")
+        raise PermissionDenied()
     context_dict={}
     form = RecipeForm()
     #ings = UtilisedIngredientForm()
