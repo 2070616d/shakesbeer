@@ -15,6 +15,8 @@ def add_rating(recipe, user, score):
     rating = Rating.objects.get_or_create(recipe=recipe,rating=score,user=user)[0]
     return rating
 
+
+
 class ModelTests(TestCase):
     def test_recipe(self):
         user = User.objects.create(username="test user")
@@ -159,22 +161,51 @@ class ViewTests(TestCase):
         mimetype = response['Content-Type']
         self.assertEquals(mimetype,'application/json')
 
+        response = self.client.post('/shakesbeer/get_names/', {'term':'recipe'},
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertContains(response, 'test')
+        mimetype = response['Content-Type']
+        self.assertEquals(mimetype,'application/json')
+
     def test_get_ingredient_names(self):
         response = self.client.get('/shakesbeer/get_ingredient_names/')
         self.assertEqual(response.status_code, 200)
+        response = self.client.get('/shakesbeer/get_ingredient_names/', {'term':'asdfghjkl'})
+        self.assertEqual(response.status_code, 200)
+        content = response.content
+        self.assertEquals(content, "fail")
+        mimetype = response['Content-Type']
+        self.assertEquals(mimetype,'application/json')
+
+        ingredient = Ingredient.objects.create(name="ingredient name")
+        ingredient = Ingredient.objects.create(name="test ingredient")
+        response = self.client.post('/shakesbeer/get_ingredient_names/', {'term':'ingredient'},
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertContains(response, 'ingredient name')
+        self.assertContains(response, 'test ingredient')
+        mimetype = response['Content-Type']
+        self.assertEquals(mimetype,'application/json')
+        
 
     def test_guest(self):
         response = self.client.get(reverse('addrecipe'))
-        self.assertContains(response, 'You cannot do this as you are not logged in.')
+        self.assertContains(response, 'the glass is empty')
 
         response = self.client.get(reverse('userpage'))
-        self.assertContains(response, 'You cannot do this as you are not logged in.')
+        self.assertContains(response, 'the glass is empty')
 
         user = User.objects.create(username="test user")
         recipe = add_recipe("test recipe", user)
         response = self.client.get('/shakesbeer/recipe/test-recipetest-user/')
         self.assertContains(response, 'comment or rate this recipe!')
 
+        response = self.client.get('/shakesbeer/rate/test-recipetest-user/?score=5')
+        recipe.refreshRatings()
+        self.assertEquals(recipe.avgrating, 0.0)
+
+    def test_invalid_page(self):
+        response = self.client.get('/shakesbeer/pagethatdoesntexit/')
+        self.assertContains(response,'the glass is empty')
 
     def test_user_page(self):
         # register user
@@ -224,6 +255,11 @@ class ViewTests(TestCase):
         response = self.client.get('/shakesbeer/rate/test-recipetest-user/?score=5')
         recipe.refreshRatings()
         self.assertEqual(recipe.avgrating, 5.0)
+        # same person changes their rating
+        response = self.client.get('/shakesbeer/rate/test-recipetest-user/?score=3')
+        recipe.refreshRatings()
+        self.assertEqual(recipe.avgrating, 3.0)
+
 
     def test_comment(self):
         response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})    
@@ -239,6 +275,15 @@ class ViewTests(TestCase):
         response = self.client.get(reverse('about'))
         self.assertContains(response, 'about us')
 
+    def test_login_and_register(self):
+        response = self.client.get('/accounts/register/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})
+
+        response = self.client.get('/accounts/login/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
+        
     def test_add_recipe(self):
         # register user
         response = self.client.post('/accounts/register/', {'username':'bob','email':'bob@bob.com','password1':'password','password2':'password'})
@@ -246,6 +291,9 @@ class ViewTests(TestCase):
         response = self.client.post('/accounts/login/',{'username':'bob','password2':'password'})
         self.assertEqual(response.status_code, 200)
 
+        response = self.client.get('/shakesbeer/recipe/add/')
+        self.assertEqual(response.status_code, 200)
+        
         # add recipe from page
         response = self.client.post('/shakesbeer/recipe/add/', {'name':'test recipe','form-0-ingredient':'vodka','form-MIN_NUM_FORMS':'0','form-MAX_NUM_FORMS':'1','form-INITIAL_FORMS':'0','form-TOTAL_FORMS':'1','form-0-amount':'one litre','instructions':'mix','picture':'none'})
 
