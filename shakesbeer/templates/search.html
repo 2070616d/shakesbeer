@@ -9,7 +9,7 @@
 {% for recipe in results %}
 <li class="listboxitem"><strong>
 <a href="{% url 'recipe' recipe.slug %}" class="recipeImg" rel="{{ recipe.picture.url }}" title="{{recipe.name}}">{{ recipe.name }}</a></strong> by {{ recipe.user }}
-<span class="rating">
+<span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
 {% for star in recipe.avgrating|times %}
 <span class="filled">★</span>
 {% endfor %}
