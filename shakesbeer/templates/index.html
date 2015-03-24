@@ -19,7 +19,7 @@
     <ul class="listbox">
     {% for recipe in top10recent %}
     <li class="listboxitem"><strong>
-    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong> by {{ recipe.user }}
+    <a href="{% url 'recipe' recipe.slug %}" class="recipeImg" rel="{{ recipe.picture.url }}" title="{{recipe.name}}">{{ recipe.name }}</a></strong> by {{ recipe.user }}
     <span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
     {% for star in recipe.avgrating|times %}
     <span class="filled">★</span>
@@ -36,7 +36,7 @@
     <ul class="listbox">
     {% for recipe in top10rating %}
     <li class="listboxitem"><strong>
-    <a href="{% url 'recipe' recipe.slug %}">{{ recipe.name }}</a></strong> by {{ recipe.user }}
+    <a href="{% url 'recipe' recipe.slug %}" class="recipeImg" rel="{{ recipe.picture.url }}" title="{{recipe.name}}">{{ recipe.name }}</a></strong> by {{ recipe.user }}
     <span title="average {{recipe.avgrating}} out of {{recipe.noratings}} rating(s)" class="rating">
     {% for star in recipe.avgrating|times %}
     <span class="filled">★</span>

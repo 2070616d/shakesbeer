@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function test() {
 
     $('#search').on("submit", function(event){
       if ($(location).attr('pathname') == "/shakesbeer/") {
@@ -9,6 +9,7 @@ $(document).ready(function() {
       $.get('/shakesbeer/search/', {search: query}, function(data){
         $('#search-results').html(data);
         $('#text-hide').hide();
+        imagePreview();
       });
     });
 

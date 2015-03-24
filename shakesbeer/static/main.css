@@ -368,3 +368,14 @@ input[type=text], input[type=password], input[type=email], textarea{
 .ingredient input{
     width: 48%;
 }
+
+img{border:1px;}
+
+#recipeImg{
+    position:absolute;
+    border:1px solid #ccc;
+    background:#333;
+    padding:5px;
+    display:none;
+    color:#fff;
+}
