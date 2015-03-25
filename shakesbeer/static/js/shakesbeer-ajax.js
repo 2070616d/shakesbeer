@@ -1,7 +1,7 @@
-$(document).ready(function test() {
+$(document).ready(function() {
 
     $('#search').on("submit", function(event){
-      if ($(location).attr('pathname') == "/shakesbeer/") {
+      if ($(location).attr('pathname') == "/shakesbeer/" || $(location).attr('pathname') == "/") {
         event.preventDefault();
       }
       $('.search').autocomplete('close');

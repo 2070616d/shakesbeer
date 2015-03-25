@@ -24,7 +24,7 @@ this.imagePreview = function(){
     $("a.recipeImg").mousemove(function(e){
         var posY;
         if (e.pageY - $(window).scrollTop() + $('#recipeImg').height() >= $(window).height() ) {
-            posY = $(window).height() + $(window).scrollTop() - $('#recipeImg').height() - 30;
+            posY = $(window).height() + $(window).scrollTop() - $('#recipeImg').height() - 50;
         } else {
             posY = e.pageY - yOffset;
         }
