@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from random import randint, uniform
 from datetime import *
 
+# Create a test user
 user = User.objects.create_user(username='test', email=None, password='test')
 
 def populate():

@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+    // Shows the search results on the main page when searching
     $('#search').on("submit", function(event){
       if ($(location).attr('pathname') == "/shakesbeer/" || $(location).attr('pathname') == "/") {
         event.preventDefault();
@@ -21,6 +22,7 @@ $(document).ready(function() {
       return split( term ).pop();
     }
 
+    // Autocomplete when user is searching the page
     $( ".search" )
       // don't navigate away from the field on tab when selecting an item
       .bind( "keydown", function( event ) {
@@ -31,6 +33,7 @@ $(document).ready(function() {
       })
       .autocomplete({
         delay: 100,
+        // Get the data for autocomplete
         source: function( request, response ) {
           $.getJSON( "/shakesbeer/get_names/", {
             term: extractLast( request.term )

@@ -99,6 +99,7 @@ def addrecipe(request):
     #context_dict['ings'] = ings
     return render(request, 'addrecipe.html', context_dict)
 
+# Get the search results and render to the results.html page
 def results(request,tag=""):
     result = []
 
@@ -112,7 +113,7 @@ def results(request,tag=""):
 
     return render(request, 'results.html', context_dict)
 
-
+# Get the serach results and render to the search.html page
 def search(request):
     if request.method == 'GET':
         query = request.GET['search'].strip()
@@ -123,6 +124,8 @@ def search(request):
 
     return render(request, 'search.html', context_dict)
 
+# Does the search in the recipe model and returns dictionary of the results
+# that satisfies specified conditions.
 def get_results(request, query):
     results = []
     similar = False
@@ -152,6 +155,7 @@ def get_results(request, query):
     context_dict = {'results': results[:30], 'similar': similar}
     return context_dict
 
+# Creates a json response that contains names of ingredients
 def get_ingredient_names(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
@@ -169,6 +173,7 @@ def get_ingredient_names(request):
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
 
+# Creates a json response that contains names of ingredients and recipes
 def get_names(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
