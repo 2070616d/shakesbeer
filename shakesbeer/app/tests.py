@@ -5,12 +5,14 @@ from datetime import *
 import time
 from django.core.urlresolvers import reverse
 
+# adds a recipe
 def add_recipe(name, user):
     picture='/static/images/no-image.png'
     recipe = Recipe.objects.get_or_create(name=name,instructions="...",
                                   user= user,date=datetime.now(),picture=picture,avgrating=0.0,noratings=0)[0]
     return recipe
 
+# adds a rating
 def add_rating(recipe, user, score):
     rating = Rating.objects.get_or_create(recipe=recipe,rating=score,user=user)[0]
     return rating
@@ -18,11 +20,13 @@ def add_rating(recipe, user, score):
 
 
 class ModelTests(TestCase):
+    # test recipe model functions
     def test_recipe(self):
         user = User.objects.create(username="test user")
         recipe = add_recipe("test recipe", user)
         self.assertEquals(recipe.__unicode__(), recipe.name)
-        
+
+    # test that slugs are unique
     def test_unique_recipe_slug(self):
         user = User.objects.create(username="test user")
         recipe = add_recipe("test recipe", user)
@@ -31,6 +35,7 @@ class ModelTests(TestCase):
         recipe.save()
         self.assertEqual(recipe.slug, 'test-recipetest-user-1')
 
+    # test that ratings are refreshed corectly
     def test_refresh_ratings(self):
         user = User.objects.create(username="test user")
         recipe = add_recipe("test recipe", user)
@@ -44,6 +49,7 @@ class ModelTests(TestCase):
         # average should be 11 / 3 with two decimal digits, 3.37
         self.assertEquals(recipe.avgrating, 3.67)
 
+    # test ingredient model functions
     def test_ingredient(self):
           ingredient = Ingredient.objects.create(name="ingredient name")
           self.assertEqual(ingredient.__unicode__(), ingredient.name)
@@ -93,6 +99,7 @@ class ViewTests(TestCase):
         recipe = add_recipe("test recipe", user)
 
         response = self.client.get('/shakesbeer/recipe/test-recipetest-user/')
+        # check that response has expected variables and values
         self.assertEqual(response.context['recipe'], recipe)
         self.assertEqual(response.context['current_rating'], 0)
 

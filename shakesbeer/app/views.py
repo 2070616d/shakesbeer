@@ -210,8 +210,10 @@ def rate(request,recipe_name_slug):
             score = request.GET['score']
             try:
                 rating = Rating.objects.filter(recipe=recipe,user=request.user)
+                # if user has already rated recipe, delete rating
                 if rating.exists():
                     rating[0].delete()
+                # add rating
                 rating = Rating.objects.get_or_create(recipe=recipe, rating=score, user=request.user)[0]
             except:
                 pass
